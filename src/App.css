@@ -1,0 +1,3400 @@
+:root {
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  color: #f4f4f4;
+  background: #0c0d0f;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, #24282d 0%, transparent 32%),
+    linear-gradient(145deg, #111316 0%, #08090a 100%);
+}
+
+button,
+select,
+input {
+  font: inherit;
+}
+
+.app {
+  width: 100%;
+  min-height: 100vh;
+  padding: 30px;
+}
+
+.appHeader {
+  width: min(100%, 1700px);
+  margin: 0 auto 24px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #c9a96e;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.8rem);
+  letter-spacing: -0.045em;
+}
+
+.subtitle {
+  margin: 10px 0 0;
+  color: #a9adb3;
+  font-size: 1rem;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 18px;
+  width: min(100%, 1700px);
+  margin: 0 auto;
+}
+
+.controlPanel {
+  align-self: start;
+  overflow: hidden;
+  border: 1px solid #34383e;
+  border-radius: 16px;
+  background: rgba(18, 20, 23, 0.96);
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.3);
+}
+
+.controlPanelHeading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  border-bottom: 1px solid #30343a;
+  background: #202328;
+}
+
+.controlPanelHeading span {
+  color: #8f959d;
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.controlPanelHeading strong {
+  font-size: 1.08rem;
+}
+
+.controlGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 17px 20px 0;
+}
+
+.controlGroup > span,
+.scaleNotes > span {
+  color: #9ca2aa;
+  font-size: 0.74rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.controlGroup select {
+  width: 100%;
+  padding: 10px 11px;
+  border: 1px solid #444a52;
+  border-radius: 8px;
+  outline: none;
+  color: #f5f5f5;
+  background: #292d32;
+}
+
+.controlGroup select:focus {
+  border-color: #c6933e;
+}
+
+.checkboxControl {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 20px;
+  color: #c9ccd1;
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.checkboxControl input {
+  width: 17px;
+  height: 17px;
+  margin: 1px 0 0;
+  accent-color: #c6933e;
+}
+
+.legend {
+  padding: 18px 20px;
+  border-top: 1px solid #30343a;
+  border-bottom: 1px solid #30343a;
+}
+
+.legendTitle {
+  margin: 0 0 12px;
+  color: #858b93;
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.legend > div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 9px;
+  color: #c4c7cc;
+  font-size: 0.84rem;
+}
+
+.legendCircle {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 1px solid;
+  border-radius: 50%;
+}
+
+.rootLegend {
+  border-color: #ffe09a;
+  background: #bc6d22;
+}
+
+.scaleLegend {
+  border-color: #9ce9eb;
+  background: #287e83;
+}
+
+.outsideLegend {
+  border-color: #6f757d;
+  background: #34383d;
+}
+
+.scaleNotes {
+  padding: 18px 20px 22px;
+}
+
+.scaleNoteList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 11px;
+}
+
+.scaleNoteList strong {
+  display: grid;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 7px;
+  place-items: center;
+  border: 1px solid #477f83;
+  border-radius: 7px;
+  color: #c5fbfd;
+  background: #1e5559;
+  font-size: 0.78rem;
+}
+
+.scaleNoteList .selectedRootNote {
+  border-color: #dfad61;
+  color: #fff0cb;
+  background: #81501e;
+}
+
+.instrumentArea {
+  min-width: 0;
+}
+
+.informationBar {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 18px;
+  overflow: hidden;
+  border: 1px solid #30343a;
+  border-radius: 14px;
+  background: rgba(22, 24, 27, 0.9);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+}
+
+.informationBar > div {
+  display: flex;
+  flex: 1 1 180px;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 76px;
+  padding: 17px 22px;
+  border-right: 1px solid #30343a;
+}
+
+.informationBar > div:last-child {
+  border-right: 0;
+}
+
+.informationLabel {
+  color: #858b93;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.informationBar strong {
+  color: #f1f1f1;
+  font-size: 0.96rem;
+}
+
+.fretboardPanel {
+  overflow: hidden;
+  border: 1px solid #34383e;
+  border-radius: 16px;
+  background: rgba(16, 18, 20, 0.95);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.38);
+}
+
+.scrollHint {
+  padding: 11px 18px;
+  border-bottom: 1px solid #2c3035;
+  color: #8e949c;
+  font-size: 0.78rem;
+  text-align: right;
+}
+
+.fretboardScroller {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 18px 0 10px;
+  scrollbar-color: #555b63 #191b1e;
+  scrollbar-width: thin;
+}
+
+.fretboardScroller::-webkit-scrollbar {
+  height: 11px;
+}
+
+.fretboardScroller::-webkit-scrollbar-track {
+  background: #191b1e;
+}
+
+.fretboardScroller::-webkit-scrollbar-thumb {
+  border: 2px solid #191b1e;
+  border-radius: 99px;
+  background: #555b63;
+}
+
+.fretboard {
+  display: block;
+  min-width: 1950px;
+}
+
+.neckBackground {
+  stroke: #4d5156;
+  stroke-width: 2;
+}
+
+.fretWire {
+  stroke: #c2c5c7;
+  stroke-width: 2;
+  opacity: 0.88;
+}
+
+.nut {
+  stroke: #f1e6cf;
+  stroke-width: 8;
+}
+
+.stringLine {
+  stroke: #d7d8d9;
+  opacity: 0.92;
+}
+
+.stringLabel {
+  fill: #f3d49c;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.fretNumber {
+  fill: #92989f;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.nutLabel {
+  fill: #787e85;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.positionMarker {
+  fill: #d8e6e8;
+  stroke: #7ba3aa;
+  stroke-width: 2;
+  opacity: 0.72;
+}
+
+.noteGroup {
+  cursor: pointer;
+  user-select: none;
+}
+
+.noteCircle {
+  fill: #34383d;
+  stroke: #777e86;
+  stroke-width: 1.5;
+  transition:
+    fill 120ms ease,
+    stroke 120ms ease,
+    opacity 120ms ease;
+}
+
+.openNoteCircle {
+  stroke-width: 2;
+}
+
+.scaleNoteCircle {
+  fill: #287e83;
+  stroke: #a5ecee;
+}
+
+.rootNoteCircle {
+  fill: #bc6d22;
+  stroke: #ffe09a;
+  stroke-width: 2.4;
+}
+
+.outsideNoteCircle {
+  fill: #303439;
+  stroke: #626971;
+  opacity: 0.7;
+}
+
+.hiddenNoteCircle {
+  fill: transparent;
+  stroke: transparent;
+  filter: none;
+}
+
+.noteName {
+  pointer-events: none;
+  fill: #f8f8f8;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.rootNoteName {
+  fill: #fff7df;
+  font-weight: 900;
+}
+
+.outsideNoteName {
+  fill: #a1a6ac;
+}
+
+.noteGroup:hover .noteCircle:not(.hiddenNoteCircle) {
+  stroke: #ffffff;
+  stroke-width: 2.5;
+}
+
+@media (max-width: 900px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .controlPanel {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .controlPanelHeading {
+    grid-column: 1 / -1;
+  }
+
+  .legend,
+  .scaleNotes {
+    border-top: 1px solid #30343a;
+  }
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: 18px 11px;
+  }
+
+  .controlPanel {
+    display: block;
+  }
+
+  .informationBar > div {
+    border-right: 0;
+    border-bottom: 1px solid #30343a;
+  }
+
+  .informationBar > div:last-child {
+    border-bottom: 0;
+  }
+
+  .scrollHint {
+    text-align: left;
+  }
+}
+.modeSelector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 16px 20px 4px;
+}
+
+.modeSelector button {
+  padding: 9px 5px;
+  border: 1px solid #444a52;
+  border-radius: 7px;
+  color: #aeb3b9;
+  background: #292d32;
+  cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    color 120ms ease,
+    background 120ms ease;
+}
+
+.modeSelector button:hover {
+  border-color: #777e87;
+  color: #ffffff;
+}
+
+.modeSelector .activeMode {
+  border-color: #d4a557;
+  color: #fff1cb;
+  background: #71501f;
+}
+
+.customNoteSection {
+  padding: 18px 20px 4px;
+}
+
+.customNoteHeading {
+  display: block;
+  margin-bottom: 10px;
+  color: #9ca2aa;
+  font-size: 0.74rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.customNoteGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.customNoteButton {
+  min-height: 34px;
+  border: 1px solid #444a52;
+  border-radius: 7px;
+  color: #b6bbc1;
+  background: #292d32;
+  cursor: pointer;
+}
+
+.customNoteButton:hover {
+  border-color: #8b929a;
+  color: #ffffff;
+}
+
+.selectedCustomNote {
+  border-color: #72c2c7;
+  color: #d7fdff;
+  background: #28666b;
+}
+
+.clearNotesButton {
+  width: 100%;
+  margin-top: 9px;
+  padding: 8px;
+  border: 1px solid #474c53;
+  border-radius: 7px;
+  color: #b9bdc2;
+  background: transparent;
+  cursor: pointer;
+}
+
+.clearNotesButton:hover {
+  border-color: #8f969e;
+  color: #ffffff;
+}
+
+.thirdLegend {
+  border-color: #e1b8ff;
+  background: #77419a;
+}
+
+.fifthLegend {
+  border-color: #b8f5bd;
+  background: #347a3d;
+}
+
+.chordLegend {
+  border-color: #b9d6ff;
+  background: #366b9b;
+}
+
+.thirdNoteCircle {
+  fill: #77419a;
+  stroke: #e1b8ff;
+  stroke-width: 2;
+}
+
+.fifthNoteCircle {
+  fill: #347a3d;
+  stroke: #b8f5bd;
+  stroke-width: 2;
+}
+
+.chordToneCircle {
+  fill: #366b9b;
+  stroke: #b9d6ff;
+  stroke-width: 2;
+}
+
+.noteGroup:focus {
+  outline: none;
+}
+
+.noteGroup:focus .noteCircle {
+  stroke: #ffffff;
+  stroke-width: 3;
+}
+
+.noteGroup:active .noteCircle {
+  stroke: #ffffff;
+  stroke-width: 3;
+}
+
+.octaveHighlightControl {
+  padding-top: 0;
+}
+
+.octaveHighlightCircle {
+  stroke: #ffffff;
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 4px rgba(255, 255, 255, 0.95))
+    drop-shadow(0 0 10px rgba(116, 224, 255, 0.75));
+}
+
+.tuningSection {
+  padding: 18px 20px;
+  border-top: 1px solid #30343a;
+}
+
+.tuningHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.tuningHeading span {
+  color: #9ca2aa;
+  font-size: 0.74rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tuningHeading button {
+  padding: 5px 9px;
+  border: 1px solid #454b52;
+  border-radius: 6px;
+  color: #bfc3c8;
+  background: #292d32;
+  cursor: pointer;
+}
+
+.tuningHeading button:hover {
+  border-color: #7b838c;
+  color: #ffffff;
+}
+
+.tuningList {
+  display: grid;
+  gap: 7px;
+}
+
+.tuningRow {
+  display: grid;
+  grid-template-columns: 1fr 72px;
+  gap: 10px;
+  align-items: center;
+}
+
+.tuningRow span {
+  color: #c2c6cb;
+  font-size: 0.82rem;
+}
+
+.tuningRow select {
+  padding: 7px;
+  border: 1px solid #444a52;
+  border-radius: 7px;
+  color: #f4f4f4;
+  background: #292d32;
+}
+
+.selectedFretHighlight {
+  fill: rgba(105, 190, 255, 0.08);
+  pointer-events: none;
+}
+
+.selectedStringHighlight {
+  fill: rgba(255, 210, 120, 0.07);
+  pointer-events: none;
+}
+
+.selectedPositionCircle {
+  stroke: #ffffff;
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 5px rgba(255, 255, 255, 0.95))
+    drop-shadow(0 0 12px rgba(255, 198, 94, 0.75));
+}
+
+
+.selectionPanel {
+  margin: 0 0 18px;
+  overflow: hidden;
+  border: 1px solid #34383e;
+  border-radius: 14px;
+  background: rgba(18, 20, 23, 0.94);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+}
+
+.selectionPanelHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #30343a;
+  background: #202328;
+}
+
+.selectionPanelHeading > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.selectionPanelHeading span,
+.selectionDetails span {
+  color: #858b93;
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.selectionPanelHeading strong {
+  color: #f5d79f;
+  font-size: 1.1rem;
+}
+
+.selectionPanelHeading button {
+  padding: 7px 11px;
+  border: 1px solid #4b5158;
+  border-radius: 7px;
+  color: #c7cbd0;
+  background: #292d32;
+  cursor: pointer;
+}
+
+.selectionPanelHeading button:hover {
+  border-color: #8a929b;
+  color: #ffffff;
+}
+
+.selectionDetails {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(120px, 1fr));
+}
+
+.selectionDetails > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 74px;
+  padding: 16px 20px;
+  border-right: 1px solid #30343a;
+}
+
+.selectionDetails > div:last-child {
+  border-right: 0;
+}
+
+.selectionDetails strong {
+  color: #f2f2f2;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+  .selectionDetails {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .selectionDetails > div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .selectionDetails > div:nth-child(-n + 2) {
+    border-bottom: 1px solid #30343a;
+  }
+}
+
+@media (max-width: 600px) {
+  .selectionDetails {
+    grid-template-columns: 1fr;
+  }
+
+  .selectionDetails > div {
+    border-right: 0;
+    border-bottom: 1px solid #30343a;
+  }
+
+  .selectionDetails > div:last-child {
+    border-bottom: 0;
+  }
+}
+
+
+.explorerSection {
+  padding: 18px 20px;
+  border-top: 1px solid #30343a;
+}
+
+.explorerHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.explorerHeading > span,
+.explorerControl > span,
+.explorerResult > span {
+  color: #9ca2aa;
+  font-size: 0.74rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.explorerToggle {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  color: #c7cbd0;
+  font-size: 0.78rem;
+}
+
+.explorerToggle input {
+  width: 16px;
+  height: 16px;
+  accent-color: #4fc3ff;
+}
+
+.explorerControl {
+  display: grid;
+  gap: 7px;
+  margin-top: 11px;
+}
+
+.explorerControl select {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid #444a52;
+  border-radius: 7px;
+  color: #f4f4f4;
+  background: #292d32;
+}
+
+.explorerControl select:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.explorerResult {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 13px;
+  padding: 10px 11px;
+  border: 1px solid #364550;
+  border-radius: 8px;
+  background: rgba(35, 55, 68, 0.55);
+}
+
+.explorerResult strong {
+  color: #bfeaff;
+  font-size: 0.84rem;
+}
+
+.explorerMatchCircle {
+  stroke: #4fc3ff;
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 4px rgba(79, 195, 255, 0.95))
+    drop-shadow(0 0 12px rgba(79, 195, 255, 0.7));
+}
+
+
+.selectionPanelActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+
+.interactionHint {
+  margin-top: 8px;
+  color: #858b93;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+/* Unified musical-degree color system */
+.degreeRoot {
+  fill: #d62828;
+  stroke: #ffd9d9;
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 5px rgba(255, 120, 120, 0.9))
+    drop-shadow(0 0 12px rgba(214, 40, 40, 0.85));
+}
+
+.degreeSecond {
+  fill: #b88a24;
+  stroke: #ffe49a;
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 5px rgba(255, 228, 154, 0.85))
+    drop-shadow(0 0 12px rgba(184, 138, 36, 0.75));
+}
+
+.degreeThird {
+  fill: #8e44ad;
+  stroke: #e8c4f5;
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 5px rgba(232, 196, 245, 0.85))
+    drop-shadow(0 0 12px rgba(142, 68, 173, 0.75));
+}
+
+.degreeFourth {
+  fill: #2a9d8f;
+  stroke: #c7fff7;
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 5px rgba(199, 255, 247, 0.85))
+    drop-shadow(0 0 12px rgba(42, 157, 143, 0.75));
+}
+
+.degreeFifth {
+  fill: #3a86ff;
+  stroke: #d6e6ff;
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 5px rgba(214, 230, 255, 0.9))
+    drop-shadow(0 0 12px rgba(58, 134, 255, 0.8));
+}
+
+.degreeSixth {
+  fill: #f4a261;
+  stroke: #ffe0c2;
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 5px rgba(255, 224, 194, 0.85))
+    drop-shadow(0 0 12px rgba(244, 162, 97, 0.75));
+}
+
+.degreeSeventh {
+  fill: #d94fd5;
+  stroke: #ffd0fc;
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 5px rgba(255, 208, 252, 0.85))
+    drop-shadow(0 0 12px rgba(217, 79, 213, 0.75));
+}
+
+.degreeOther {
+  fill: #65758b;
+  stroke: #d8e2ef;
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 5px rgba(216, 226, 239, 0.75))
+    drop-shadow(0 0 12px rgba(101, 117, 139, 0.65));
+}
+
+
+/* Explorer legend swatches */
+.explorerLegend {
+  border-color: #4fc3ff;
+  background: #366b9b;
+}
+
+.degreeRootLegend {
+  border-color: #ffd9d9;
+  background: #d62828;
+}
+
+.degreeSecondLegend {
+  border-color: #ffe49a;
+  background: #b88a24;
+}
+
+.degreeThirdLegend {
+  border-color: #e8c4f5;
+  background: #8e44ad;
+}
+
+.degreeFourthLegend {
+  border-color: #c7fff7;
+  background: #2a9d8f;
+}
+
+.degreeFifthLegend {
+  border-color: #d6e6ff;
+  background: #3a86ff;
+}
+
+.degreeSixthLegend {
+  border-color: #ffe0c2;
+  background: #f4a261;
+}
+
+.degreeSeventhLegend {
+  border-color: #ffd0fc;
+  background: #d94fd5;
+}
+
+.degreeOtherLegend {
+  border-color: #d8e2ef;
+  background: #65758b;
+}
+
+
+/* Chord Analyzer selected pitches */
+.analyzerSelectedCircle {
+  stroke: #ffffff;
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 5px rgba(255, 255, 255, 0.95))
+    drop-shadow(0 0 12px rgba(79, 195, 255, 0.8));
+}
+
+
+/* Chord Analyzer visual priority */
+.analyzerBackgroundCircle {
+  opacity: 0.18;
+  filter: none;
+}
+
+.analyzerBackgroundNoteName {
+  opacity: 0.22;
+}
+
+
+/* Chord Analyzer legend swatches */
+.analyzerSelectedLegend {
+  border-color: #ffffff;
+  background: #4fc3ff;
+}
+
+.analyzerBackgroundLegend {
+  border-color: #6f757d;
+  background: rgba(111, 117, 125, 0.24);
+}
+
+
+/* Fade Explorer while Chord Analyzer has visual priority */
+.analyzerExplorerBackgroundCircle {
+  opacity: 0.16;
+  filter: none;
+}
+
+.analyzerExplorerBackgroundNoteName {
+  opacity: 0.22;
+}
+
+
+/* Fretboard-side tuning rail */
+.fretboardWorkspace {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.fretboardTuningPanel {
+  overflow: hidden;
+  border: 1px solid #34383e;
+  border-radius: 14px;
+  background: rgba(18, 20, 23, 0.96);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+}
+
+.fretboardTuningHeader {
+  display: flex;
+  height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 0 10px 0 12px;
+  border-bottom: 1px solid #30343a;
+  background: #202328;
+}
+
+.fretboardTuningHeader span {
+  color: #9ca2aa;
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fretboardTuningHeader button {
+  padding: 5px 9px;
+  border: 1px solid #454b52;
+  border-radius: 6px;
+  color: #bfc3c8;
+  background: #292d32;
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+
+.fretboardTuningHeader button:hover {
+  border-color: #7b838c;
+  color: #ffffff;
+}
+
+.fretboardTuningRows {
+  padding-top: 65px;
+}
+
+.fretboardTuningRow {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 5px;
+  align-items: center;
+  height: 58px;
+  padding: 0 7px;
+}
+
+.fretboardTuningRow > span {
+  color: #8f959d;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.fretboardTuningRow select {
+  min-width: 0;
+  width: 100%;
+  padding: 6px 3px;
+  border: 1px solid #444a52;
+  border-radius: 7px;
+  outline: none;
+  color: #f4f4f4;
+  background: #292d32;
+  font-size: 0.78rem;
+}
+
+.fretboardTuningRow select:focus {
+  border-color: #c6933e;
+}
+
+@media (max-width: 600px) {
+  .fretboardWorkspace {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 7px;
+  }
+
+  .fretboardTuningRow {
+    grid-template-columns: 22px minmax(0, 1fr);
+    padding: 0 5px;
+  }
+}
+
+
+/* Chord Analyzer information grouping */
+.analyzerVoicingInfo {
+  display: grid;
+  gap: 5px;
+  margin-top: 8px;
+  padding: 9px 10px;
+  border: 1px solid #34383e;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.analyzerSectionLabel {
+  margin-bottom: 2px;
+  color: #8f959d;
+  font-size: 0.67rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.analyzerInfoRow {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+}
+
+.analyzerInfoRow > span {
+  color: #858b93;
+  font-size: 0.72rem;
+}
+
+.analyzerInfoRow > strong {
+  min-width: 0;
+  color: #e5e7ea;
+  font-size: 0.76rem;
+  font-weight: 650;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+
+/* Compare Mode legend */
+.compareLegend {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 8px 10px;
+  border: 1px solid #34383e;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.compareLegend > div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #b8bdc4;
+  font-size: 0.72rem;
+}
+
+.compareLegendDot {
+  width: 11px;
+  height: 11px;
+  flex: 0 0 11px;
+  border: 2px solid;
+  border-radius: 999px;
+}
+
+.compareLegendShared {
+  border-color: #9bd3ad;
+  background: #4f8f68;
+}
+
+.compareLegendA {
+  border-color: #f0c57d;
+  background: #c58a38;
+}
+
+.compareLegendB {
+  border-color: #91c7ec;
+  background: #477fa8;
+}
+
+
+/* Compare Mode fretboard highlights */
+.compareSharedCircle {
+  fill: #4f8f68;
+  stroke: #9bd3ad;
+  stroke-width: 2.4;
+  opacity: 1;
+}
+
+.compareOnlyACircle {
+  fill: #c58a38;
+  stroke: #f0c57d;
+  stroke-width: 2.4;
+  opacity: 1;
+}
+
+.compareOnlyBCircle {
+  fill: #477fa8;
+  stroke: #91c7ec;
+  stroke-width: 2.4;
+  opacity: 1;
+}
+
+.compareNoteName {
+  opacity: 1;
+  fill: #ffffff;
+}
+
+
+/* Fretboard contextual information */
+.fretboardInfoRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+  margin-bottom: 12px;
+}
+
+.fretboardInfoRow > * {
+  min-width: 0;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .fretboardInfoRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* UI polish — left control column
+   Keep the existing layout/logic; unify panel rhythm and hierarchy. */
+.controlsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.controlsColumn > section,
+.controlsColumn > .panel,
+.controlsColumn > [class$="Panel"] {
+  margin: 0;
+}
+
+/* Make the main tool panels read as one family. */
+.explorerPanel,
+.analyzerPanel,
+.comparePanel,
+.musicalSelectionPanel {
+  border-radius: 10px;
+}
+
+/* Consistent vertical rhythm inside left-side panels. */
+.explorerPanel,
+.analyzerPanel,
+.comparePanel {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+/* Keep headings compact so controls remain the focus. */
+.explorerPanelHeading,
+.analyzerPanelHeading,
+.comparePanelHeading {
+  margin-bottom: 10px;
+}
+
+/* Give labels and controls a little more breathing room. */
+.explorerPanel label,
+.analyzerPanel label,
+.comparePanel label,
+.musicalSelectionPanel label {
+  line-height: 1.25;
+}
+
+/* Visually separate secondary information without making another heavy card. */
+.explorerResult,
+.analyzerVoicingInfo,
+.compareLegend {
+  margin-top: 10px;
+}
+
+/* On smaller windows preserve the same rhythm. */
+@media (max-width: 900px) {
+  .controlsColumn {
+    gap: 10px;
+  }
+}
+
+
+/* UI polish — right-side instrument workspace */
+.instrumentWorkspace,
+.fretboardArea,
+.workspaceMain {
+  min-width: 0;
+}
+
+/* Keep Selected Position visually tied to the information row below it. */
+.selectionPanel {
+  margin-bottom: 10px;
+}
+
+/* Colors + Selected Notes behave like one compact information band. */
+.fretboardInfoRow {
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.fretboardInfoRow > * {
+  height: 100%;
+}
+
+/* Give the fretboard/tuning area a slightly stronger visual boundary. */
+.fretboardWorkspace {
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.018);
+}
+
+/* Keep the tuning rail and fretboard aligned as one instrument surface. */
+.fretboardTuningPanel {
+  align-self: stretch;
+}
+
+.fretboardWorkspace > svg,
+.fretboardWorkspace > .fretboard,
+.fretboardWorkspace > .fretboardContainer {
+  min-width: 0;
+}
+
+/* Slightly reduce vertical separation on medium screens. */
+@media (max-width: 1100px) {
+  .selectionPanel {
+    margin-bottom: 8px;
+  }
+
+  .fretboardInfoRow {
+    margin-bottom: 10px;
+  }
+
+  .fretboardWorkspace {
+    padding: 8px;
+  }
+}
+
+
+/* UI polish — align left-column sections to the Musical Selection edge */
+.musicalSelectionPanel,
+.labelModeSection,
+.explorerPanel,
+.compareSection,
+.scaleNotes {
+  box-sizing: border-box;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Normalize horizontal inset across the tool sections */
+.musicalSelectionPanel,
+.explorerPanel,
+.compareSection,
+.scaleNotes {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Display Labels should follow the same left/right inset */
+.labelModeSection {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Keep section headings on one common vertical guide */
+.controlPanelHeading,
+.explorerHeading,
+.compareSection > .explorerHeading,
+.scaleNotes > .explorerHeading,
+.labelModeHeading {
+  margin-left: 0;
+}
+
+/* Prevent nested panel content from introducing a second indent */
+.explorerPanel .explorerControl,
+.compareSection .explorerControl,
+.scaleNotes .analyzerVoicingInfo,
+.scaleNotes .scaleNoteList,
+.scaleNotes .clearNotesButton {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+
+/* UI polish — align Display Labels with the other Musical Selection controls */
+.musicalSelectionPanel .labelModeSection {
+  box-sizing: border-box;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.musicalSelectionPanel .labelModeHeading,
+.musicalSelectionPanel .labelModeSelector {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+
+/* Fix: Display Labels is not wrapped by .musicalSelectionPanel.
+   Match the same 20px horizontal inset used by .controlGroup and .modeSelector. */
+.labelModeSection {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 17px 20px 0;
+  margin: 0;
+}
+
+.labelModeHeading,
+.labelModeSelector {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+
+/* UI polish — strengthen hierarchy in the right-side instrument workspace */
+
+/* Selected Position is the primary information block above the fretboard. */
+.selectionPanel {
+  padding: 16px 18px;
+  border-radius: 12px;
+}
+
+.selectionPanelHeading {
+  margin-bottom: 12px;
+}
+
+.selectionPanelHeading > div:first-child {
+  display: grid;
+  gap: 3px;
+}
+
+.selectionPanelHeading strong {
+  font-size: 1rem;
+}
+
+.selectionDetails {
+  gap: 10px;
+}
+
+/* Colors + Selected Notes act as a secondary information band. */
+.fretboardInfoRow {
+  gap: 10px;
+}
+
+.fretboardInfoRow .legend,
+.fretboardInfoRow .scaleNotes {
+  box-sizing: border-box;
+  min-height: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.fretboardInfoRow .legendTitle,
+.fretboardInfoRow .scaleNotes > span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Keep the actual instrument visually dominant. */
+.fretboardWorkspace {
+  margin-top: 2px;
+  padding: 12px;
+  border-radius: 16px;
+}
+
+.fretboardTuningHeader {
+  height: 44px;
+}
+
+/* Give the workspace a cleaner vertical rhythm on medium screens. */
+@media (max-width: 1100px) {
+  .selectionPanel {
+    padding: 14px 16px;
+  }
+
+  .fretboardInfoRow .legend,
+  .fretboardInfoRow .scaleNotes {
+    padding: 11px 12px;
+  }
+
+  .fretboardWorkspace {
+    padding: 10px;
+  }
+}
+
+
+/* UI polish — consistent controls and interaction states */
+
+/* Main left-side selects */
+.controlGroup select,
+.explorerControl select,
+.labelModeSection select {
+  min-height: 40px;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.controlGroup select:hover,
+.explorerControl select:not(:disabled):hover,
+.labelModeSection select:hover {
+  border-color: #626972;
+}
+
+.controlGroup select:focus,
+.explorerControl select:focus,
+.labelModeSection select:focus {
+  border-color: #c6933e;
+  box-shadow: 0 0 0 2px rgba(198, 147, 62, 0.14);
+}
+
+/* Primary mode / note / analyzer result buttons */
+.modeSelector button,
+.customNoteButton,
+.clearNotesButton {
+  min-height: 36px;
+  font-size: 0.82rem;
+}
+
+/* Make active and hover states feel consistent across the tool column. */
+.modeSelector button,
+.customNoteButton,
+.clearNotesButton,
+.selectionPanelHeading button,
+.fretboardTuningHeader button {
+  transition:
+    border-color 120ms ease,
+    color 120ms ease,
+    background 120ms ease;
+}
+
+/* Keep native keyboard focus visible. */
+.modeSelector button:focus-visible,
+.customNoteButton:focus-visible,
+.clearNotesButton:focus-visible,
+.selectionPanelHeading button:focus-visible,
+.fretboardTuningHeader button:focus-visible {
+  outline: 2px solid #c6933e;
+  outline-offset: 2px;
+}
+
+/* Compact tuning controls stay smaller, but match the same corner language. */
+.fretboardTuningRow select {
+  border-radius: 8px;
+}
+
+.fretboardTuningHeader button {
+  border-radius: 7px;
+}
+
+
+/* Clicked-pitch highlight stays readable when outside notes are hidden. */
+.octaveHighlightNoteName {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+/* UI polish — typography and information hierarchy */
+
+/* Section labels: quiet, consistent navigation cues. */
+.controlPanelHeading,
+.explorerHeading,
+.labelModeHeading,
+.analyzerSectionLabel,
+.selectionPanelHeading span,
+.selectionDetails span,
+.fretboardInfoRow .legendTitle,
+.fretboardInfoRow .scaleNotes > span {
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.065em;
+  text-transform: uppercase;
+}
+
+/* Primary values should read clearly without competing with the fretboard. */
+.selectionPanelHeading strong {
+  font-size: 1.02rem;
+  font-weight: 720;
+  line-height: 1.2;
+}
+
+.selectionDetails strong {
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+
+/* Form labels are secondary to the selected value. */
+.controlGroup > label,
+.explorerControl > label {
+  font-size: 0.74rem;
+  font-weight: 650;
+  letter-spacing: 0.015em;
+}
+
+/* Dropdown values remain easy to scan. */
+.controlGroup select,
+.explorerControl select,
+.labelModeSection select {
+  font-weight: 560;
+}
+
+/* Supporting information should remain visually quieter. */
+.scrollHint,
+.analyzerVoicingInfo,
+.explorerResult {
+  line-height: 1.4;
+}
+
+/* Avoid heavy visual competition in the contextual band. */
+.fretboardInfoRow {
+  font-size: 0.82rem;
+}
+
+/* Slightly tighter hierarchy on smaller screens. */
+@media (max-width: 900px) {
+  .selectionPanelHeading strong {
+    font-size: 0.96rem;
+  }
+
+  .selectionDetails strong {
+    font-size: 0.82rem;
+  }
+}
+
+
+/* UI polish — responsive behavior */
+
+/* Medium desktop / small laptop */
+@media (max-width: 1200px) {
+  .appLayout {
+    grid-template-columns: 290px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .fretboardInfoRow {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .fretboardWorkspace {
+    grid-template-columns: 122px minmax(0, 1fr);
+    gap: 8px;
+  }
+}
+
+/* Tablet / narrow browser window */
+@media (max-width: 900px) {
+  .appLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .controlsColumn {
+    width: 100%;
+  }
+
+  .fretboardInfoRow {
+    grid-template-columns: 1fr;
+  }
+
+  .fretboardWorkspace {
+    grid-template-columns: 112px minmax(0, 1fr);
+  }
+
+  .selectionDetails {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .fretboardScroller {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+}
+
+/* Phone / very narrow window */
+@media (max-width: 640px) {
+  .appShell,
+  .appMain,
+  .mainContent {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .selectionPanel {
+    padding: 12px;
+  }
+
+  .selectionDetails {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .fretboardWorkspace {
+    grid-template-columns: 102px minmax(0, 1fr);
+    gap: 6px;
+    padding: 7px;
+  }
+
+  .fretboardTuningHeader {
+    padding: 0 5px;
+  }
+
+  .fretboardTuningHeader span {
+    font-size: 0.62rem;
+  }
+
+  .fretboardTuningHeader button {
+    padding: 3px 5px;
+    font-size: 0.62rem;
+  }
+
+  .fretboardTuningRow {
+    grid-template-columns: 18px minmax(0, 1fr);
+    gap: 3px;
+    padding: 0 4px;
+  }
+
+  .fretboardTuningRow > span {
+    font-size: 0.62rem;
+  }
+
+  .fretboardTuningRow select {
+    padding: 5px 2px;
+    font-size: 0.72rem;
+  }
+
+  .modeSelector {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .modeSelector button {
+    min-width: 0;
+  }
+}
+
+
+/* Chapman Stick string-group labels */
+.stringGroupLabel {
+  fill: #7f8790;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+
+/* Chapman Stick group labels: dedicated left column + bracket */
+.stringGroupLabel {
+  fill: #9aa1a9;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  pointer-events: none;
+}
+
+.stringGroupBracket {
+  stroke: #59616a;
+  stroke-width: 1.4;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+
+/* Chapman Stick damper / non-playable first position */
+.damperArea {
+  pointer-events: none;
+}
+
+.damperBand {
+  fill: rgba(145, 151, 160, 0.12);
+  stroke: rgba(174, 180, 188, 0.46);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+  pointer-events: none;
+}
+
+.damperLabel {
+  fill: #8f969e;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  pointer-events: none;
+}
+
+.fretNumberNonPlayable {
+  opacity: 0.42;
+}
+
+
+/* Grand Stick Melody / Bass label polish */
+.stringGroupLabel {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+}
+
+.stringGroupLabelMelody {
+  fill: #69b7ff;
+}
+
+.stringGroupLabelBass {
+  fill: #e2a35f;
+}
+
+/* Grand Stick tuning-label group association */
+.stringLabelMelody {
+  fill: #8fc8ff;
+  font-weight: 700;
+}
+
+.stringLabelBass {
+  fill: #e7b479;
+  font-weight: 700;
+}
+
+
+/* Tuning Reset button — match the visual weight of the other controls */
+.fretboardTuningHeader button {
+  min-width: 58px;
+  min-height: 32px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+
+/* UI polish — information hierarchy above the fretboard
+   CSS-only: no musical logic or fretboard/tuning geometry changes. */
+
+.informationBar {
+  margin-bottom: 14px;
+}
+
+.informationBar > div {
+  min-height: 72px;
+  padding: 15px 20px;
+}
+
+.informationBar > div:first-child {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.informationBar > div:first-child strong {
+  color: #f5d79f;
+  font-size: 1.02rem;
+}
+
+.informationBar strong {
+  line-height: 1.35;
+}
+
+.selectionPanel {
+  margin-bottom: 14px;
+}
+
+.selectionPanelHeading {
+  padding: 14px 20px;
+}
+
+.selectionPanelHeading strong {
+  font-size: 1.18rem;
+  letter-spacing: -0.01em;
+}
+
+.selectionDetails > div {
+  min-height: 68px;
+  padding: 14px 20px;
+}
+
+.selectionDetails strong {
+  font-size: 0.98rem;
+  line-height: 1.3;
+}
+
+.selectionPanelHeading button {
+  min-width: 62px;
+  min-height: 32px;
+  padding: 6px 11px;
+  font-weight: 650;
+}
+
+
+/* UI polish — responsive Information Bar */
+@media (max-width: 1200px) {
+  .informationBar > div {
+    flex: 1 1 160px;
+    min-width: 0;
+  }
+
+  .informationBar strong {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 900px) {
+  .informationBar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .informationBar > div {
+    min-height: 68px;
+    border-right: 1px solid #30343a;
+    border-bottom: 1px solid #30343a;
+  }
+
+  .informationBar > div:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .informationBar > div:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .informationBar {
+    grid-template-columns: 1fr;
+  }
+
+  .informationBar > div,
+  .informationBar > div:nth-child(2n),
+  .informationBar > div:nth-last-child(-n + 2) {
+    border-right: 0;
+    border-bottom: 1px solid #30343a;
+  }
+
+  .informationBar > div:last-child {
+    border-bottom: 0;
+  }
+}
+
+/* Tuning presets — Step 1 */
+.fretboardTuningPreset {
+  display: grid;
+  gap: 5px;
+  padding: 10px 8px 0;
+}
+
+.fretboardTuningPreset > span {
+  color: #8f959d;
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fretboardTuningPreset select {
+  min-width: 0;
+  width: 100%;
+  padding: 7px 6px;
+  border: 1px solid #444a52;
+  border-radius: 7px;
+  outline: none;
+  color: #f4f4f4;
+  background: #292d32;
+  font-size: 0.76rem;
+}
+
+.fretboardTuningPreset select:focus {
+  border-color: #c6933e;
+}
+
+/* The preset selector occupies space above the string rows. */
+.fretboardTuningRows {
+  padding-top: 20px;
+}
+
+/* Tuning presets — Step 1 */
+.fretboardTuningPreset {
+  display: grid;
+  gap: 5px;
+  padding: 10px 8px 0;
+}
+
+.fretboardTuningPreset > span {
+  color: #8f959d;
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fretboardTuningPreset select {
+  min-width: 0;
+  width: 100%;
+  padding: 7px 6px;
+  border: 1px solid #444a52;
+  border-radius: 7px;
+  outline: none;
+  color: #f4f4f4;
+  background: #292d32;
+  font-size: 0.76rem;
+}
+
+.fretboardTuningPreset select:focus {
+  border-color: #c6933e;
+}
+
+/* The preset selector occupies space above the string rows. */
+.fretboardTuningRows {
+  padding-top: 20px;
+}
+
+.fretboardTuningSave { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:6px; padding:8px 8px 0; }
+.fretboardTuningSave input { min-width:0; width:100%; padding:7px; border:1px solid #444a52; border-radius:7px; outline:none; color:#f4f4f4; background:#292d32; font-size:.74rem; }
+.fretboardTuningSave input:focus { border-color:#c6933e; }
+.fretboardTuningSave button { min-width:46px; padding:6px 8px; border:1px solid #555c65; border-radius:7px; color:#f2f2f2; background:#353a40; font-size:.72rem; font-weight:700; cursor:pointer; }
+.fretboardTuningSave button:hover:not(:disabled) { background:#41474e; }
+.fretboardTuningSave button:disabled { opacity:.42; cursor:default; }
+
+
+/* Custom tuning UI — wider tuning rail */
+.fretboardWorkspace {
+  grid-template-columns: 175px minmax(0, 1fr);
+}
+
+@media (max-width: 1200px) {
+  .fretboardWorkspace {
+    grid-template-columns: 165px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .fretboardWorkspace {
+    grid-template-columns: 155px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .fretboardWorkspace {
+    grid-template-columns: 145px minmax(0, 1fr);
+  }
+}
+
+.fretboardTuningDelete {
+  width: 100%;
+  margin-top: 7px;
+  padding: 6px 8px;
+  border: 1px solid #65484a;
+  border-radius: 7px;
+  color: #e5b8ba;
+  background: #34292b;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.fretboardTuningDelete:hover {
+  background: #403033;
+  border-color: #80575a;
+}
+
+/* Practice Range — Step 1 */
+.practiceRangeSection { margin-top:14px; padding-top:12px; border-top:1px solid #30343a; }
+.practiceRangeToggle { margin-bottom:8px; }
+.practiceRangeControls { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.practiceRangeControls .controlGroup { margin:0; }
+.practiceRangeControls select:disabled { opacity:.45; cursor:default; }
+.noteGroup.practiceRangeOutside { opacity:.16; transition:opacity 140ms ease; }
+.noteGroup.practiceRangeOutside:hover,
+.noteGroup.practiceRangeOutside:focus { opacity:.42; }
+
+
+/* Practice Range — Step 2: fretboard-local controls */
+.practiceRangeBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 10px;
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border: 1px solid #34383e;
+  border-radius: 12px;
+  background: rgba(18, 20, 23, 0.94);
+}
+
+.practiceRangeEnable,
+.practiceRangeField {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.practiceRangeEnable {
+  margin-right: 4px;
+  color: #d7d9dc;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.practiceRangeEnable input {
+  width: 16px;
+  height: 16px;
+  accent-color: #c6933e;
+}
+
+.practiceRangeField > span {
+  color: #8f959d;
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.practiceRangeField select {
+  min-width: 68px;
+  padding: 7px 8px;
+  border: 1px solid #444a52;
+  border-radius: 8px;
+  outline: none;
+  color: #f4f4f4;
+  background: #292d32;
+  font-size: 0.78rem;
+}
+
+.practiceRangeField select:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.practiceRangeField select:focus {
+  border-color: #c6933e;
+}
+
+.practiceRangeBand {
+  fill: rgba(198, 147, 62, 0.07);
+  stroke: rgba(198, 147, 62, 0.28);
+  stroke-width: 1.5;
+  pointer-events: none;
+}
+
+
+/* Practice Range — stronger active-area highlight */
+.practiceRangeBand {
+  fill: rgba(198, 147, 62, 0.14);
+  stroke: rgba(225, 176, 90, 0.55);
+  stroke-width: 2;
+}
+
+/* Practice Range — Step 3: matching-position count */
+.practiceRangeCount {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin-left: auto;
+  padding: 6px 9px;
+  border: 1px solid rgba(198, 147, 62, 0.28);
+  border-radius: 8px;
+  background: rgba(198, 147, 62, 0.08);
+}
+
+.practiceRangeCount > span {
+  color: #9ca2aa;
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.practiceRangeCount > strong {
+  color: #f3d49c;
+  font-size: 0.9rem;
+}
+
+/* Practice Range — Step 4: compact positions */
+.practiceRangeSuggestions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding-top: 2px;
+}
+
+.practiceRangeSuggestions > span {
+  color: #8f959d;
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.practiceRangeSuggestions > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.practiceRangeSuggestions button {
+  padding: 5px 8px;
+  border: 1px solid rgba(198, 147, 62, 0.34);
+  border-radius: 999px;
+  color: #f0d6a5;
+  background: rgba(198, 147, 62, 0.09);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.practiceRangeSuggestions button:hover {
+  border-color: rgba(225, 176, 90, 0.7);
+  background: rgba(198, 147, 62, 0.17);
+}
+
+
+/* Practice Range — Step 5: playability-ranked positions */
+.practiceRangeSuggestion {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.practiceRangeSuggestion strong {
+  font-size: 0.72rem;
+}
+
+.practiceRangeSuggestion span {
+  padding: 2px 5px;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.practiceRangeSuggestionEasy {
+  border-color: rgba(112, 190, 135, 0.52) !important;
+}
+
+.practiceRangeSuggestionModerate {
+  border-color: rgba(225, 176, 90, 0.58) !important;
+}
+
+.practiceRangeSuggestionWide {
+  border-color: rgba(205, 118, 118, 0.5) !important;
+}
+
+
+/* Experimental two-hand fingering engine — Step 1 */
+.twoHandRunPreview {
+  display: grid;
+  gap: 7px;
+  width: 100%;
+  padding-top: 4px;
+}
+
+.twoHandRunPreview > span {
+  color: #8f959d;
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.twoHandRunPreview > div {
+  display: grid;
+  gap: 6px;
+}
+
+.twoHandRunCard {
+  display: grid;
+  gap: 3px;
+  padding: 7px 9px;
+  border: 1px solid rgba(116, 181, 214, 0.26);
+  border-radius: 8px;
+  background: rgba(72, 120, 148, 0.08);
+}
+
+.twoHandRunCard strong {
+  color: #ccecff;
+  font-size: 0.74rem;
+}
+
+.twoHandRunCard small {
+  color: #9aaab5;
+  font-size: 0.66rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+/* Scale Path — Step 1 */
+.practiceScalePathInfo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  padding-top: 3px;
+}
+.practiceScalePathInfo > span {
+  color: #8f959d;
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.practiceScalePathInfo > strong {
+  color: #d8eefb;
+  font-size: 0.76rem;
+}
+.practiceScalePathInfo > small {
+  color: #8fa0aa;
+  font-size: 0.68rem;
+}
+.practiceScalePathCircle {
+  stroke: #dff6ff !important;
+  stroke-width: 4 !important;
+  filter:
+    drop-shadow(0 0 4px rgba(210, 241, 255, 0.95))
+    drop-shadow(0 0 11px rgba(86, 180, 225, 0.72)) !important;
+  opacity: 1 !important;
+}
+.practiceScalePathNoteName {
+  opacity: 1 !important;
+  fill: #ffffff !important;
+  font-weight: 850;
+}
+.practiceScalePathBackground {
+  opacity: 0.18 !important;
+  filter: none !important;
+}
+.practiceScalePathBackgroundNoteName {
+  opacity: 0.2 !important;
+}
+
+
+/* Record Practice Path — Step 1 */
+.recordPracticePathBar {
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+  width:100%; padding-top:4px;
+}
+.recordPracticePathToggle {
+  display:flex; align-items:center; gap:7px;
+  color:#d7d9dc; font-size:.76rem; font-weight:750;
+}
+.recordPracticePathToggle input { width:16px; height:16px; accent-color:#c6933e; }
+.recordPracticePathCount {
+  padding:4px 7px; border-radius:999px;
+  background:rgba(198,147,62,.10); color:#e4c58e;
+  font-size:.68rem; font-weight:750;
+}
+.recordPracticePathButton {
+  padding:5px 8px; border:1px solid #454a51; border-radius:7px;
+  background:#292d32; color:#d9dde1; font-size:.68rem; cursor:pointer;
+}
+.recordPracticePathButton:hover { border-color:#c6933e; }
+.recordPracticePathBar small { width:100%; color:#858d95; font-size:.67rem; }
+
+.practicePathStepBadge {
+  fill:#101419; stroke:#dff6ff; stroke-width:1.5; pointer-events:none;
+}
+.practicePathStepNumber {
+  fill:#fff; font-size:8px; font-weight:850; pointer-events:none;
+}
+
+
+/* Record Practice Path — Step 2: save paths */
+.recordPracticePathSave {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) auto;
+  gap: 6px;
+  min-width: 260px;
+}
+
+.recordPracticePathSave input {
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid #444a52;
+  border-radius: 7px;
+  outline: none;
+  color: #f4f4f4;
+  background: #292d32;
+  font-size: 0.7rem;
+}
+
+.recordPracticePathSave input:focus {
+  border-color: #c6933e;
+}
+
+.recordPracticePathButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.recordPracticePathSavedCount {
+  color: #9ca2aa;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+
+/* Record Practice Path — Step 3: recall saved paths */
+.savedPracticePathControls {
+  display:grid;
+  grid-template-columns:minmax(150px,1fr) auto auto;
+  gap:6px;
+  align-items:center;
+  min-width:min(100%,360px);
+}
+.savedPracticePathControls select {
+  min-width:0; width:100%; padding:6px 8px;
+  border:1px solid #444a52; border-radius:7px; outline:none;
+  color:#f4f4f4; background:#292d32; font-size:.7rem;
+}
+.savedPracticePathControls select:focus { border-color:#c6933e; }
+.savedPracticePathDelete:not(:disabled) {
+  border-color:#65484a; color:#e5b8ba; background:#34292b;
+}
+.savedPracticePathDelete:hover:not(:disabled) {
+  border-color:#80575a; background:#403033;
+}
+@media (max-width:700px) {
+  .savedPracticePathControls { grid-template-columns:1fr auto; }
+  .savedPracticePathControls select { grid-column:1 / -1; }
+}
+
+/* Record Practice Path — Step 4: loaded-path indicator */
+.loadedPracticePathIndicator {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 7px;
+  width: 100%;
+  padding: 7px 9px;
+  border: 1px solid rgba(112, 190, 135, 0.34);
+  border-radius: 8px;
+  background: rgba(112, 190, 135, 0.08);
+}
+
+.loadedPracticePathIndicator > span {
+  color: #9fd6b0;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.loadedPracticePathIndicator > strong {
+  color: #e7fff0;
+  font-size: 0.78rem;
+}
+
+.loadedPracticePathIndicator > small {
+  color: #a7b8ae;
+  font-size: 0.67rem;
+}
+
+/* Finger Exercises — Step 1: hand territories */
+.fingerExerciseBar {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px;
+  margin:0 0 10px;
+  padding:10px 12px;
+  border:1px solid #34383e;
+  border-radius:12px;
+  background:rgba(18,20,23,.94);
+}
+.fingerExerciseHeading {
+  display:grid;
+  gap:1px;
+  margin-right:4px;
+}
+.fingerExerciseHeading strong {
+  color:#e2e4e7;
+  font-size:.8rem;
+}
+.fingerExerciseHeading span {
+  color:#858c94;
+  font-size:.64rem;
+}
+.fingerExerciseHandControls {
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+}
+.fingerExerciseHandButton {
+  padding:6px 10px;
+  border:1px solid #444a52;
+  border-radius:999px;
+  background:#292d32;
+  color:#aeb4ba;
+  font-size:.7rem;
+  font-weight:750;
+  cursor:pointer;
+}
+.fingerExerciseHandButton:hover {
+  border-color:#69717a;
+}
+.fingerExerciseHandButton.active {
+  border-color:#c6933e;
+  background:rgba(198,147,62,.14);
+  color:#f0d5a3;
+}
+.fingerExerciseBar small {
+  width:100%;
+  color:#858d95;
+  font-size:.66rem;
+}
+
+/* These classes are applied to the SVG string rows in the companion
+   Fretboard patch below. */
+.fingerExerciseLeftZone {
+  filter:drop-shadow(0 0 5px rgba(105,174,218,.7));
+}
+.fingerExerciseRightZone {
+  filter:drop-shadow(0 0 5px rgba(213,151,104,.7));
+}
+.fingerExerciseInactiveZone {
+  opacity:.32;
+}
+
+/* Finger Exercises — Step 1b: hand territory visualization */
+.fingerExerciseLeftZone,
+.fingerExerciseRightZone,
+.fingerExerciseInactiveZone {
+  transition: opacity 150ms ease;
+}
+
+.fingerExerciseInactiveZone {
+  opacity: 0.22;
+}
+
+.fingerExerciseLeftZone .stringLine {
+  stroke: #6faeda;
+  filter: drop-shadow(0 0 3px rgba(111, 174, 218, 0.55));
+}
+
+.fingerExerciseRightZone .stringLine {
+  stroke: #d59768;
+  filter: drop-shadow(0 0 3px rgba(213, 151, 104, 0.55));
+}
+
+.fingerExerciseLeftZone .stringLabel {
+  fill: #a9d7f4;
+  font-weight: 800;
+}
+
+.fingerExerciseRightZone .stringLabel {
+  fill: #f0bd96;
+  font-weight: 800;
+}
+
+/* Finger Exercises — Step 2: basic 1-2-3-4 pattern */
+.fingerExerciseField {
+  display:grid;
+  gap:3px;
+  min-width:84px;
+}
+
+.fingerExerciseField > span {
+  color:#858c94;
+  font-size:.62rem;
+  font-weight:750;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+
+.fingerExerciseField > strong {
+  color:#f0d5a3;
+  font-size:.76rem;
+}
+
+.fingerExerciseField select {
+  min-width:68px;
+  padding:6px 8px;
+  border:1px solid #444a52;
+  border-radius:7px;
+  outline:none;
+  color:#f4f4f4;
+  background:#292d32;
+  font-size:.72rem;
+}
+
+.fingerExerciseField select:focus {
+  border-color:#c6933e;
+}
+
+.fingerExerciseNoteCircle {
+  stroke:#f5e2bd !important;
+  stroke-width:3 !important;
+  filter:
+    drop-shadow(0 0 4px rgba(245,226,189,.65))
+    drop-shadow(0 0 8px rgba(198,147,62,.38)) !important;
+}
+
+.fingerExerciseFingerBadge {
+  fill:#12161a;
+  stroke:#f0c77f;
+  stroke-width:1.5;
+  pointer-events:none;
+}
+
+.fingerExerciseFingerNumber {
+  fill:#fff3d8;
+  font-size:10px;
+  font-weight:900;
+  pointer-events:none;
+}
+
+/* Finger Exercises — Step 3: Chromatic / Scale mode */
+.fingerExerciseField select {
+  cursor: pointer;
+}
+
+.fingerExerciseBar .fingerExerciseField:first-of-type {
+  min-width: 108px;
+}
+
+/* In Scale mode the existing finger badges are reused.
+   Only selected-scale notes receive 1–4. */
+
+
+/* Finger Exercises — Step 3b
+   Scale mode now shows one continuous one-octave path per selected hand.
+   Repeated scale tones elsewhere in the four-fret hand position are not
+   assigned finger numbers. */
+/* Finger Exercises — Step 4: directional scale run */
+.fingerExerciseScaleIrrelevantString {
+  opacity: 0.16 !important;
+}
+.fingerExerciseScaleIrrelevantString .stringLine {
+  filter: none !important;
+}
+
+/* Practice Paths — Step 5: step-by-step review */
+.practicePathReviewControls {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px;
+}
+
+.practicePathReviewStep {
+  min-width:86px;
+  padding:5px 8px;
+  border:1px solid rgba(105,174,218,.28);
+  border-radius:999px;
+  background:rgba(105,174,218,.08);
+  color:#c9e8f7;
+  font-size:.68rem;
+  font-weight:750;
+  text-align:center;
+}
+
+.practicePathReviewCurrentCircle {
+  opacity:1 !important;
+  stroke:#ffffff !important;
+  stroke-width:5 !important;
+  filter:
+    drop-shadow(0 0 5px rgba(255,255,255,.95))
+    drop-shadow(0 0 13px rgba(105,174,218,.9)) !important;
+}
+
+.practicePathReviewBackgroundCircle {
+  opacity:.14 !important;
+  filter:none !important;
+}
+
+.practicePathStepBadgeCurrent {
+  fill:#dff6ff !important;
+  stroke:#ffffff !important;
+}
+
+.practicePathStepNumberCurrent {
+  fill:#101419 !important;
+}
+
+/* Practice Paths — Step 6: playback */
+.practicePathPlayButton.active {
+  border-color: rgba(112,190,135,.55);
+  background: rgba(112,190,135,.12);
+  color:#dff7e7;
+}
+
+.practicePathSpeedControl {
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.practicePathSpeedControl > span {
+  color:#858d95;
+  font-size:.64rem;
+  font-weight:750;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+
+.practicePathSpeedControl select {
+  padding:5px 7px;
+  border:1px solid #444a52;
+  border-radius:7px;
+  outline:none;
+  color:#f4f4f4;
+  background:#292d32;
+  font-size:.68rem;
+}
+
+.practicePathSpeedControl select:focus {
+  border-color:#c6933e;
+}
+
+/* Scale / Chord Study Mode — Step 1 */
+.studyModePanel {
+  margin-top:12px;
+  padding:12px;
+  border:1px solid #353a40;
+  border-radius:12px;
+  background:rgba(24,27,31,.72);
+}
+
+.studyModeHeader {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.studyModeHeader > div {
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.studyModeHeader strong {
+  color:#f2f3f4;
+  font-size:.82rem;
+}
+
+.studyModeEyebrow {
+  color:#c6933e;
+  font-size:.6rem;
+  font-weight:800;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+
+.studyModeToggle {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:#b9c0c7;
+  font-size:.68rem;
+  font-weight:750;
+}
+
+.studyModeBody {
+  margin-top:12px;
+  display:grid;
+  gap:12px;
+}
+
+.studyModeLabelChoice > span {
+  display:block;
+  margin-bottom:6px;
+  color:#858d95;
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+.studyModeSegmented {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5px;
+}
+
+.studyModeSegmented button {
+  padding:7px 8px;
+  border:1px solid #444a52;
+  border-radius:8px;
+  background:#292d32;
+  color:#c7ccd1;
+  font-size:.69rem;
+  font-weight:750;
+  cursor:pointer;
+}
+
+.studyModeSegmented button.active {
+  border-color:#c6933e;
+  background:rgba(198,147,62,.13);
+  color:#f4d59e;
+}
+
+.studyModeSummary {
+  padding:10px;
+  border:1px solid rgba(198,147,62,.2);
+  border-radius:10px;
+  background:rgba(198,147,62,.055);
+}
+
+.studyModeSummary > strong {
+  display:block;
+  margin-bottom:8px;
+  color:#f3d6a5;
+  font-size:.78rem;
+}
+
+.studyModeSummaryRow {
+  display:grid;
+  grid-template-columns:64px 1fr;
+  gap:8px;
+  padding:4px 0;
+  border-top:1px solid rgba(255,255,255,.045);
+}
+
+.studyModeSummaryRow span {
+  color:#858d95;
+  font-size:.63rem;
+  font-weight:750;
+}
+
+.studyModeSummaryRow b {
+  color:#d9dde1;
+  font-size:.67rem;
+  font-weight:650;
+  line-height:1.4;
+}
+
+/* UI Polish — Step 2: compact horizontal legend */
+
+.fretboardInfoRow {
+  margin-bottom: 8px;
+}
+
+.fretboardInfoRow .legend {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 0;
+  padding: 8px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.fretboardInfoRow .legendTitle {
+  margin: 0 6px 0 0;
+  padding-right: 12px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.fretboardInfoRow .legend > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  min-width: 0;
+  font-size: 0.68rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.fretboardInfoRow .legendCircle {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+@media (max-width: 820px) {
+  .fretboardInfoRow .legend {
+    gap: 7px 12px;
+  }
+
+  .fretboardInfoRow .legendTitle {
+    width: 100%;
+    padding-right: 0;
+    padding-bottom: 6px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+}
+
+/* UI Polish — Step 3: compact Selected Position while idle */
+.selectionPanelIdle {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.selectionPanelIdle .selectionPanelHeading {
+  margin-bottom: 0 !important;
+  align-items: center;
+}
+
+.selectionPanelIdle .selectionPanelHeading strong {
+  font-size: .82rem !important;
+  font-weight: 650;
+  color: #9ba3aa;
+}
+
+/* UI Polish — Step 5: left-column harmony */
+
+/* Give the secondary-tool headers one shared vertical rhythm. */
+.studyModeHeader,
+.explorerHeading,
+.compareSection > .explorerHeading,
+.scaleNotes > .explorerHeading {
+  box-sizing: border-box;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Make all On / Off checkbox controls occupy the same space on the right. */
+.studyModeToggle,
+.explorerToggle {
+  box-sizing: border-box;
+  min-width: 58px;
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  flex: 0 0 58px;
+  white-space: nowrap;
+}
+
+.studyModeToggle input[type="checkbox"],
+.explorerToggle input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  flex: 0 0 14px;
+}
+
+.studyModeToggle > span,
+.explorerToggle > span {
+  min-width: 22px;
+  text-align: left;
+}
+
+/* Chord Analyzer results should read like a result block, not float centrally. */
+.scaleNotes .scaleNoteList {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.scaleNotes .scaleNoteList > span {
+  align-self: flex-start;
+  margin: 2px 0 1px;
+  color: #8f959d;
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.07em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.scaleNotes .scaleNoteList > .customNoteButton {
+  width: 100%;
+  min-height: 34px;
+  padding: 7px 10px;
+  text-align: left;
+}
+
+/* Fretboard enharmonic note labels: C#/Db, D#/Eb, etc. */
+.noteName .enharmonicNoteLine {
+  font-size: 8px;
+  letter-spacing: -0.15px;
+}
+
+/* Center the two-line enharmonic label comfortably inside note circles. */
+.noteName .enharmonicNoteLine {
+  font-size: 7.5px;
+  letter-spacing: -0.2px;
+}
+
+/* Enharmonic fretboard labels — centered explicitly in SVG note circles */
+.noteName .enharmonicNoteLine {
+  font-size: 7px;
+  letter-spacing: -0.25px;
+  dominant-baseline: middle;
+}
+
+
+/* Responsive Step 1 — desktop/tablet shell
+   Additive only: no musical or fretboard logic changes. */
+
+/* Small desktop / laptop */
+@media (max-width: 1180px) {
+  .app {
+    padding: 20px;
+  }
+
+  .workspace {
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .informationBar > div {
+    flex-basis: 150px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .fretboardWorkspace {
+    grid-template-columns: 102px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .practiceRangeBar,
+  .recordPracticePathBar,
+  .practicePathReviewControls,
+  .recordPracticePathSave,
+  .savedPracticePathControls {
+    flex-wrap: wrap;
+  }
+}
+
+/* Tablet / narrow browser */
+@media (max-width: 900px) {
+  .app {
+    padding: 14px;
+  }
+
+  .appHeader {
+    margin-bottom: 16px;
+  }
+
+  .workspace {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .controlPanel,
+  .instrumentArea {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Keep the real fretboard dimensions and scroll it rather than shrinking notes. */
+  .fretboardScroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .fretboardWorkspace {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 7px;
+  }
+
+  .informationBar {
+    margin-bottom: 12px;
+  }
+
+  .informationBar > div {
+    flex: 1 1 45%;
+    min-height: 64px;
+    padding: 12px 14px;
+  }
+
+  .studyModePanel,
+  .explorerPanel,
+  .compareSection,
+  .scaleNotes {
+    min-width: 0;
+  }
+
+  .studyModeSummaryRow {
+    grid-template-columns: 58px minmax(0, 1fr);
+  }
+}
+
+/* Very narrow tablet / phone preparation.
+   Phone-specific interaction decisions come in Responsive Step 2. */
+@media (max-width: 640px) {
+  .app {
+    padding: 8px;
+  }
+
+  .workspace {
+    gap: 10px;
+  }
+
+  .informationBar > div {
+    flex-basis: 50%;
+    min-width: 0;
+  }
+
+  .fretboardWorkspace {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 6px;
+    padding: 6px;
+  }
+
+  .practiceRangeBar,
+  .recordPracticePathBar {
+    gap: 7px;
+  }
+
+  .practiceRangeField {
+    flex: 1 1 92px;
+  }
+
+  .recordPracticePathSave {
+    width: 100%;
+  }
+
+  .recordPracticePathSave input {
+    min-width: 0;
+    flex: 1 1 150px;
+  }
+}
+
+/* Responsive Step 1B — breakpoint correction
+   Append AFTER Responsive Step 1.
+   Keep desktop + iPad-landscape style layout longer. */
+
+/* Undo the early one-column switch from Step 1.
+   Between 701px and 900px we retain the familiar left controls + instrument workspace. */
+@media (min-width: 701px) and (max-width: 900px) {
+  .workspace {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .controlPanel,
+  .instrumentArea {
+    width: auto;
+    min-width: 0;
+  }
+
+  /* The fretboard can scroll instead of forcing the whole page wider. */
+  .instrumentArea,
+  .fretboardWorkspace,
+  .fretboardScroller {
+    min-width: 0;
+  }
+
+  .fretboardScroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .informationBar > div {
+    flex: 1 1 145px;
+    min-width: 0;
+  }
+}
+
+/* Only genuinely narrow portrait/phone layouts become one column. */
+@media (max-width: 700px) {
+  .workspace {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .controlPanel {
+    order: 1;
+  }
+
+  .instrumentArea {
+    order: 2;
+  }
+
+  .controlPanel,
+  .instrumentArea {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Preserve each section as a coherent block when stacked. */
+  .musicalSelectionPanel,
+  .studyModePanel,
+  .explorerPanel,
+  .scaleNotes,
+  .compareSection,
+  .informationBar,
+  .selectionPanel,
+  .fretboardInfoRow,
+  .practiceRangeBar,
+  .practicePathsPanel,
+  .fretboardWorkspace {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .fretboardScroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Responsive Step 2 — touch-friendly controls
+   Append AFTER Responsive Step 1B.
+   No musical/fretboard logic changes. */
+
+@media (max-width: 700px) {
+  /* Comfortable minimum touch targets without making the UI oversized. */
+  button,
+  select,
+  input[type="text"],
+  input[type="number"] {
+    min-height: 40px;
+  }
+
+  button,
+  select {
+    touch-action: manipulation;
+  }
+
+  select,
+  input[type="text"],
+  input[type="number"] {
+    font-size: 16px; /* avoids automatic zoom in mobile Safari */
+  }
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+  }
+
+  /* Keep the tool toggles aligned even with larger touch checkboxes. */
+  .studyModeToggle,
+  .explorerToggle {
+    min-width: 68px;
+    min-height: 40px;
+    gap: 8px;
+    flex-basis: 68px;
+  }
+
+  /* Segmented controls become easier to tap. */
+  .modeSelector,
+  .labelModeSelector,
+  .studyModeSegmented {
+    gap: 6px;
+  }
+
+  .modeSelector button,
+  .labelModeSelector button,
+  .studyModeSegmented button {
+    min-height: 40px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  /* Form rows may wrap rather than squeeze their labels and controls. */
+  .controlGroup,
+  .explorerControl,
+  .practiceRangeBar label,
+  .recordPracticePathBar label {
+    min-width: 0;
+  }
+
+  .controlGroup select,
+  .explorerControl select {
+    max-width: 100%;
+  }
+
+  /* Practice controls need finger-sized actions on a phone. */
+  .practiceRangeBar button,
+  .recordPracticePathBar button,
+  .practicePathReviewControls button,
+  .recordPracticePathSave button,
+  .savedPracticePathControls button {
+    min-height: 40px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  /* Preserve the fretboard's readable note size.
+     Scrolling is intentional on narrow touch screens. */
+  .fretboardScroller {
+    cursor: grab;
+    scrollbar-width: thin;
+    touch-action: pan-x pan-y;
+  }
+
+  .fretboardScroller:active {
+    cursor: grabbing;
+  }
+}
+
+/* Very narrow phones: allow button groups to wrap cleanly instead of compressing. */
+@media (max-width: 430px) {
+  .modeSelector,
+  .labelModeSelector,
+  .studyModeSegmented {
+    flex-wrap: wrap;
+  }
+
+  .modeSelector button,
+  .labelModeSelector button {
+    flex: 1 1 30%;
+  }
+
+  .studyModeSegmented button {
+    flex: 1 1 45%;
+  }
+
+  .practiceRangeBar,
+  .recordPracticePathBar,
+  .practicePathReviewControls,
+  .savedPracticePathControls {
+    align-items: stretch;
+  }
+}
