@@ -55,6 +55,11 @@ type FretboardProps = {
     stringIndex: number;
     fret: number;
   }[];
+  relationshipEnabled: boolean;
+  relationshipDisplayNames: Record<string, string>;
+  relationshipPreservedNoteIndexes: number[];
+  relationshipNewNoteIndexes: number[];
+  relationshipResolutionTargetNoteIndexes: number[];
   selectedPosition: {
     stringIndex: number;
     fret: number;
@@ -186,6 +191,11 @@ function Fretboard({
   compareDisplayNames,
   analyzerEnabled,
   analyzerPositions,
+  relationshipEnabled,
+  relationshipDisplayNames,
+  relationshipPreservedNoteIndexes,
+  relationshipNewNoteIndexes,
+  relationshipResolutionTargetNoteIndexes,
   selectedPosition,
   onNoteClick,
   onNoteDoubleClick,
@@ -326,20 +336,6 @@ function Fretboard({
     );
   }
 
-  const ENHARMONIC_FRETBOARD_LABELS: Record<string, [string, string]> = {
-    "C#": ["C#", "Db"],
-    "D#": ["D#", "Eb"],
-    "F#": ["F#", "Gb"],
-    "G#": ["G#", "Ab"],
-    "A#": ["A#", "Bb"],
-  };
-
-  function getEnharmonicFretboardLabel(
-    note: string,
-  ): [string, string] | null {
-    const displayed = displayNote(note);
-    return ENHARMONIC_FRETBOARD_LABELS[displayed] ?? null;
-  }
 
   function getNoteLabel(note: string): string {
     if (labelMode === "hidden") {
@@ -347,6 +343,13 @@ function Fretboard({
     }
 
     if (labelMode === "notes") {
+      if (
+        relationshipEnabled &&
+        relationshipDisplayNames[note]
+      ) {
+        return relationshipDisplayNames[note];
+      }
+
       if (
         compareEnabled &&
         compareDisplayNames[note]
@@ -402,7 +405,11 @@ function Fretboard({
   function getNoteStatus(note: string) {
     const noteIndex = getNoteIndex(note);
     const interval = getIntervalFromRoot(note);
-    const isSelected = !explorerEnabled && activeNoteIndexes.includes(noteIndex);
+    const isSelected =
+      relationshipEnabled
+        ? activeNoteIndexes.includes(noteIndex)
+        : !explorerEnabled &&
+          activeNoteIndexes.includes(noteIndex);
 
     const isRoot =
       displayMode !== "custom" && interval === 0 && isSelected;
@@ -932,6 +939,30 @@ function Fretboard({
                           position.fret === fret,
                       );
 
+                    const isRelationshipPreserved =
+                      relationshipEnabled &&
+                      relationshipPreservedNoteIndexes.includes(
+                        noteIndex,
+                      );
+
+                    const isRelationshipNew =
+                      relationshipEnabled &&
+                      relationshipNewNoteIndexes.includes(
+                        noteIndex,
+                      );
+
+                    const isRelationshipResolutionTarget =
+                      relationshipEnabled &&
+                      relationshipResolutionTargetNoteIndexes.includes(
+                        noteIndex,
+                      );
+
+                    const isRelationshipMatch =
+                      relationshipEnabled &&
+                      activeNoteIndexes.includes(
+                        noteIndex,
+                      );
+
                     // A clicked-pitch highlight is an intentional
                     // exception to "Show notes outside selection".
                     // If the pitch is highlighted, its circles and labels
@@ -941,6 +972,7 @@ function Fretboard({
                       isExplorerMatch ||
                       isCompareMatch ||
                       isAnalyzerSelected ||
+                      isRelationshipMatch ||
                       isOctaveHighlighted ||
                       showOutsideNotes;
 
@@ -1010,6 +1042,18 @@ function Fretboard({
                         : "",
                       isPracticePathReviewBackground
                         ? "practicePathReviewBackgroundCircle"
+                        : "",
+                      isRelationshipMatch
+                        ? "relationshipNoteCircle"
+                        : "",
+                      isRelationshipPreserved
+                        ? "relationshipPreservedCircle"
+                        : "",
+                      isRelationshipNew
+                        ? "relationshipNewCircle"
+                        : "",
+                      isRelationshipResolutionTarget
+                        ? "relationshipResolutionTargetCircle"
                         : "",
 
                       hasPracticeScalePath &&
@@ -1083,7 +1127,13 @@ function Fretboard({
                           className={circleClasses}
                           cx={x}
                           cy={y}
-                          r="16"
+                          r={
+                            isRelationshipResolutionTarget
+                              ? 21
+                              : isRelationshipMatch
+                                ? 19
+                                : 16
+                          }
                           filter="url(#noteShadow)"
                         />
 
@@ -1113,6 +1163,12 @@ function Fretboard({
                               !isAnalyzerSelected
                                 ? "analyzerExplorerBackgroundNoteName"
                                 : "",
+                              isRelationshipMatch
+                                ? "relationshipNoteName"
+                                : "",
+                              isRelationshipResolutionTarget
+                                ? "relationshipResolutionTargetNoteName"
+                                : "",
                             ]
                               .filter(Boolean)
                               .join(" ")}
@@ -1120,27 +1176,7 @@ function Fretboard({
                             y={y + 5}
                             textAnchor="middle"
                           >
-                            {labelMode === "notes" &&
-                            getEnharmonicFretboardLabel(note) ? (
-                              <>
-                                <tspan
-                                  x={x}
-                                  y={y - 2.5}
-                                  className="enharmonicNoteLine"
-                                >
-                                  {getEnharmonicFretboardLabel(note)?.[0]}
-                                </tspan>
-                                <tspan
-                                  x={x}
-                                  y={y + 6.5}
-                                  className="enharmonicNoteLine"
-                                >
-                                  {getEnharmonicFretboardLabel(note)?.[1]}
-                                </tspan>
-                              </>
-                            ) : (
-                              getNoteLabel(note)
-                            )}
+                            {getNoteLabel(note)}
                           </text>
                         )}
 

@@ -13,6 +13,9 @@ import MusicalSelectionPanel from "./components/MusicalSelectionPanel";
 import AppHeader from "./components/AppHeader";
 import ChordAnalyzerPanel from "./components/ChordAnalyzerPanel";
 import ComparePanel from "./components/ComparePanel";
+import RelationshipsPanel, {
+  type RelationshipFretboardState,
+} from "./components/RelationshipsPanel";
 
 import {
   INSTRUMENT_PRESETS,
@@ -26,6 +29,7 @@ import {
   CHROMATIC_NOTES,
   INTERVAL_LABELS,
   SCALES,
+  SCALE_GROUPS,
   type ChordName,
   type DisplayMode,
   type LabelMode,
@@ -50,7 +54,14 @@ import {
   getNoteIndexesFromIntervals,
   getNotesFromIntervals,
 } from "./music/musicUtils";
-import { displayNote, displayNotes } from "./music/noteDisplay";
+import {
+  ROOT_NOTE_OPTIONS,
+  displayNote,
+  displayNotes,
+  preferenceFromSpelling,
+  setNoteDisplayPreference,
+  type AccidentalPreference,
+} from "./music/noteDisplay";
 
 type AnalyzerPosition = {
   note: string;
@@ -107,6 +118,16 @@ function App() {
     useState(false);
 
   const [rootNote, setRootNote] = useState("C");
+
+  const [notationPreference, setNotationPreference] =
+    useState<AccidentalPreference>("sharp");
+
+  /*
+   * One display preference is shared by the visible app.
+   * Choosing F# makes generated pitch-class names prefer sharps;
+   * choosing Gb makes them prefer flats.
+   */
+  setNoteDisplayPreference(notationPreference);
 
   const [selectedScale, setSelectedScale] =
     useState<ScaleName>("Major");
@@ -195,6 +216,13 @@ const [highlightedNote, setHighlightedNote] =
 
   const [compareScaleB, setCompareScaleB] =
     useState<ScaleName>("Lydian");
+
+  const [
+    relationshipFretboardState,
+    setRelationshipFretboardState,
+  ] = useState<RelationshipFretboardState | null>(
+    null,
+  );
 
 
   
@@ -617,6 +645,19 @@ function changeTuningPreset(presetId: string) {
       return;
     }
 
+    /*
+     * Find Same Note is a direct fretboard interaction.
+     * When enabled, a single click only chooses the pitch to find.
+     * It must not also alter Custom material, Explorer Note, or
+     * the old selected-position workflow.
+     */
+    if (octaveHighlightEnabled) {
+      setHighlightedNote((currentNote) =>
+        currentNote === note ? null : note,
+      );
+      return;
+    }
+
     const isSamePosition =
       selectedPosition?.stringIndex === stringIndex &&
       selectedPosition?.fret === fret;
@@ -663,13 +704,6 @@ function changeTuningPreset(presetId: string) {
               },
             ];
       });
-      return;
-    }
-
-    if (octaveHighlightEnabled) {
-      setHighlightedNote((currentNote) =>
-        currentNote === note ? null : note,
-      );
       return;
     }
 
@@ -837,6 +871,38 @@ function changeTuningPreset(presetId: string) {
       : "No custom notes selected";
   }
 
+  /*
+   * Fretboard visualization policy
+   * --------------------------------
+   * Fretboard Highlight is the single musical/visual source.
+   * Root belongs to Highlight and Scale/Chord/Note/Interval define
+   * both what is shown and what Harmony Relationships starts from.
+   * The fretboard itself is normally drawn only by:
+   *   1. a temporary Harmony Relationships preview,
+   *   2. Fretboard Highlight,
+   *   3. Find Same Note browsing.
+   */
+
+  /*
+   * "Show notes outside the selection" is now authoritative in EVERY
+   * Fretboard Highlight mode:
+   *
+   * Off      -> unchecked = bare fretboard, checked = neutral note map
+   * Scale    -> checked adds neutral notes outside the scale
+   * Chord    -> checked adds neutral notes outside the chord
+   * Note     -> checked adds neutral notes around the highlighted note
+   * Interval -> checked adds neutral notes around the interval target
+   *
+   * Find Same Note no longer forces all notes to appear by itself.
+   */
+  const fretboardShowOutsideNotes =
+    showOutsideNotes || octaveHighlightEnabled;
+
+  const fretboardActiveNoteIndexes =
+    relationshipFretboardState
+      ?.activeNoteIndexes ?? [];
+
+
   return (
     <main className="app">
       <AppHeader
@@ -848,33 +914,375 @@ function changeTuningPreset(presetId: string) {
         <aside className="controlPanel">
           <MusicalSelectionPanel
             selectedInstrumentId={selectedInstrumentId}
-            displayMode={displayMode}
-            labelMode={labelMode}
-            rootNote={rootNote}
-            selectedScale={selectedScale}
-            selectedChord={selectedChord}
-            customNotes={customNotes}
-            showOutsideNotes={showOutsideNotes}
-            octaveHighlightEnabled={octaveHighlightEnabled}
-            highlightedNote={highlightedNote}
-            selectionTitle={getSelectionTitle()}
             onInstrumentChange={changeInstrument}
-            onDisplayModeChange={setDisplayMode}
-            onLabelModeChange={setLabelMode}
-            onRootNoteChange={setRootNote}
-            onScaleChange={setSelectedScale}
-            onChordChange={setSelectedChord}
-            onCustomNoteToggle={toggleCustomNote}
-            onClearCustomNotes={() => setCustomNotes([])}
-            onShowOutsideNotesChange={setShowOutsideNotes}
-            onOctaveHighlightChange={(enabled) => {
-              setOctaveHighlightEnabled(enabled);
-
-              if (!enabled) {
-                setHighlightedNote(null);
-              }
-            }}
           />
+
+          <section className="fretboardHighlightPanel">
+            <div className="controlPanelHeading">
+              <span>Fretboard highlight</span>
+              <strong>Choose what you want to see</strong>
+            </div>
+
+            <label className="controlGroup fretboardHighlightRoot">
+              <span>Root note</span>
+              <select
+                value={rootNote}
+                onChange={(event) => {
+                  const nextRoot = event.target.value;
+
+                  setNotationPreference(
+                    preferenceFromSpelling(
+                      nextRoot,
+                      notationPreference,
+                    ),
+                  );
+                  setRootNote(nextRoot);
+
+                  if (explorerEnabled && explorerMode === "intervals") {
+                    setDisplayMode("custom");
+                    setCustomNotes([
+                      nextRoot,
+                      getNoteAtInterval(
+                        nextRoot,
+                        explorerTargetInterval,
+                      ),
+                    ]);
+                  }
+                }}
+              >
+                {ROOT_NOTE_OPTIONS.map((note) => (
+                  <option
+                    key={`highlight-root-${note}`}
+                    value={note}
+                  >
+                    {note}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <div className="modeSelector fretboardHighlightModeSelector">
+              <button
+                type="button"
+                className={!explorerEnabled ? "activeMode" : ""}
+                onClick={() => setExplorerEnabled(false)}
+              >
+                Off
+              </button>
+
+              <button
+                type="button"
+                className={
+                  explorerEnabled && explorerMode === "scales"
+                    ? "activeMode"
+                    : ""
+                }
+                onClick={() => {
+                  setExplorerEnabled(true);
+                  setExplorerMode("scales");
+                  setDisplayMode("scale");
+                  setSelectedScale(explorerTargetScale);
+                }}
+              >
+                Scale
+              </button>
+
+              <button
+                type="button"
+                className={
+                  explorerEnabled && explorerMode === "chords"
+                    ? "activeMode"
+                    : ""
+                }
+                onClick={() => {
+                  setExplorerEnabled(true);
+                  setExplorerMode("chords");
+                  setDisplayMode("chord");
+                  setSelectedChord(explorerTargetChord);
+                }}
+              >
+                Chord
+              </button>
+
+              <button
+                type="button"
+                className={
+                  explorerEnabled && explorerMode === "notes"
+                    ? "activeMode"
+                    : ""
+                }
+                onClick={() => {
+                  setExplorerEnabled(true);
+                  setExplorerMode("notes");
+                  setDisplayMode("custom");
+                  setCustomNotes([explorerTargetNote]);
+                }}
+              >
+                Note
+              </button>
+
+              <button
+                type="button"
+                className={
+                  explorerEnabled && explorerMode === "intervals"
+                    ? "activeMode"
+                    : ""
+                }
+                onClick={() => {
+                  setExplorerEnabled(true);
+                  setExplorerMode("intervals");
+                  setDisplayMode("custom");
+                  setCustomNotes([
+                    rootNote,
+                    getNoteAtInterval(
+                      rootNote,
+                      explorerTargetInterval,
+                    ),
+                  ]);
+                }}
+              >
+                Interval
+              </button>
+            </div>
+
+            {explorerEnabled && explorerMode === "notes" && (
+              <label className="controlGroup">
+                <span>Note</span>
+                <select
+                  value={explorerTargetNote}
+                  onChange={(event) => {
+                    const note = event.target.value;
+                    setExplorerTargetNote(note);
+                    setDisplayMode("custom");
+                    setCustomNotes([note]);
+                  }}
+                >
+                  {CHROMATIC_NOTES.map((note) => (
+                    <option key={`highlight-${note}`} value={note}>
+                      {displayNote(note)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+
+            {explorerEnabled && explorerMode === "intervals" && (
+              <>
+                <label className="controlGroup">
+                  <span>Interval from {displayNote(rootNote)}</span>
+                  <select
+                    value={explorerTargetInterval}
+                    onChange={(event) => {
+                      const interval =
+                        Number(event.target.value);
+
+                      setExplorerTargetInterval(interval);
+                      setDisplayMode("custom");
+                      setCustomNotes([
+                        rootNote,
+                        getNoteAtInterval(
+                          rootNote,
+                          interval,
+                        ),
+                      ]);
+                    }}
+                  >
+                    {INTERVAL_LABELS.map((label, interval) => (
+                      <option
+                        key={`highlight-int-${interval}`}
+                        value={interval}
+                      >
+                        {label} · {getIntervalLongName(interval)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <div className="fretboardHighlightInlineResult">
+                  <span>Target note</span>
+                  <strong>{displayNote(getExplorerTargetNote())}</strong>
+                </div>
+              </>
+            )}
+
+            {explorerEnabled && explorerMode === "scales" && (
+              <label className="controlGroup">
+                <span>Scale or mode</span>
+                <select
+                  value={explorerTargetScale}
+                  onChange={(event) => {
+                    const scale =
+                      event.target.value as ScaleName;
+                    setExplorerTargetScale(scale);
+                    setDisplayMode("scale");
+                    setSelectedScale(scale);
+                  }}
+                >
+                  {SCALE_GROUPS.map((group) => (
+                    <optgroup key={group.label} label={group.label}>
+                      {group.scales.map((scaleName) => (
+                        <option
+                          key={`highlight-scale-${scaleName}`}
+                          value={scaleName}
+                        >
+                          {scaleName}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+              </label>
+            )}
+
+            {explorerEnabled && explorerMode === "chords" && (
+              <label className="controlGroup">
+                <span>Chord type</span>
+                <select
+                  value={explorerTargetChord}
+                  onChange={(event) => {
+                    const chord =
+                      event.target.value as ChordName;
+                    setExplorerTargetChord(chord);
+                    setDisplayMode("chord");
+                    setSelectedChord(chord);
+                  }}
+                >
+                  {(Object.keys(CHORDS) as ChordName[]).map((chord) => (
+                    <option
+                      key={`highlight-chord-${chord}`}
+                      value={chord}
+                    >
+                      {chord}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+          </section>
+
+          <section className="materialSummaryPanel activeMaterialSummary">
+            <span className="simplePanelEyebrow">Material</span>
+
+            {!explorerEnabled && (
+              <>
+                <strong className="materialSummaryTitle">
+                  Nothing displayed
+                </strong>
+                <div className="materialSummaryRow">
+                  <span>Status</span>
+                  <b>Fretboard Highlight is Off</b>
+                </div>
+              </>
+            )}
+
+            {explorerEnabled && explorerMode === "scales" && (
+              <>
+                <strong className="materialSummaryTitle">
+                  {displayNote(rootNote)} {explorerTargetScale}
+                </strong>
+                <div className="materialSummaryRow">
+                  <span>Notes</span>
+                  <b>
+                    {displayNotes(
+                      getExplorerScaleNotes(),
+                    ).join(" · ")}
+                  </b>
+                </div>
+              </>
+            )}
+
+            {explorerEnabled && explorerMode === "chords" && (
+              <>
+                <strong className="materialSummaryTitle">
+                  {displayNote(rootNote)} {explorerTargetChord}
+                </strong>
+                <div className="materialSummaryRow">
+                  <span>Notes</span>
+                  <b>
+                    {displayNotes(
+                      getExplorerChordNotes(),
+                    ).join(" · ")}
+                  </b>
+                </div>
+              </>
+            )}
+
+            {explorerEnabled && explorerMode === "notes" && (
+              <>
+                <strong className="materialSummaryTitle">
+                  Note {displayNote(explorerTargetNote)}
+                </strong>
+                <div className="materialSummaryRow">
+                  <span>Pitch</span>
+                  <b>{displayNote(explorerTargetNote)}</b>
+                </div>
+              </>
+            )}
+
+            {explorerEnabled && explorerMode === "intervals" && (
+              <>
+                <strong className="materialSummaryTitle">
+                  {displayNote(rootNote)} →{" "}
+                  {displayNote(getExplorerTargetNote())}
+                </strong>
+                <div className="materialSummaryRow">
+                  <span>Interval</span>
+                  <b>
+                    {INTERVAL_LABELS[explorerTargetInterval]} ·{" "}
+                    {getIntervalLongName(explorerTargetInterval)}
+                  </b>
+                </div>
+              </>
+            )}
+          </section>
+
+          <div className="fretboardQuickOptions">
+            <label
+              className={[
+                "checkboxControl",
+                "simplifiedOutsideNotesControl",
+                octaveHighlightEnabled
+                  ? "temporarilyOverridden"
+                  : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+            >
+              <input
+                type="checkbox"
+                checked={showOutsideNotes}
+                disabled={octaveHighlightEnabled}
+                onChange={(event) =>
+                  setShowOutsideNotes(event.target.checked)
+                }
+              />
+              <span>
+                {octaveHighlightEnabled
+                  ? "Outside notes shown for Find Same Note"
+                  : "Show notes outside the selection"}
+              </span>
+            </label>
+
+            <label className="checkboxControl findSameNoteControl">
+              <input
+                type="checkbox"
+                checked={octaveHighlightEnabled}
+                onChange={(event) => {
+                  const enabled = event.target.checked;
+                  setOctaveHighlightEnabled(enabled);
+
+                  if (!enabled) {
+                    setHighlightedNote(null);
+                  }
+                }}
+              />
+              <span>Find Same Note</span>
+            </label>
+          </div>
+
+
+
+          <div className="legacyTheoryPanels">
 
           {studyModeAvailable && (
             <section className="studyModePanel">
@@ -1040,6 +1448,9 @@ function changeTuningPreset(presetId: string) {
   onScaleAChange={setCompareScaleA}
   onScaleBChange={setCompareScaleB}
 />
+          </div>
+
+
 
         </aside>
 
@@ -1404,6 +1815,18 @@ function changeTuningPreset(presetId: string) {
             )}
           </div>
 
+          <RelationshipsPanel
+            displayMode={displayMode}
+            rootNote={rootNote}
+            selectedScale={selectedScale}
+            selectedChord={selectedChord}
+            customNotes={customNotes}
+            notationPreference={notationPreference}
+            onFretboardStateChange={
+              setRelationshipFretboardState
+            }
+          />
+
           <div className="fretboardWorkspace">
             <TuningPanel
               tuning={tuning}
@@ -1437,12 +1860,23 @@ function changeTuningPreset(presetId: string) {
             stringGroups={
               selectedInstrument.geometry.stringGroups ?? []
             }
-            displayMode={displayMode}
+            displayMode={
+              relationshipFretboardState
+                ? "chord"
+                : displayMode
+            }
             labelMode={labelMode}
-            rootNote={rootNote}
-            activeNoteIndexes={activeNoteIndexes}
+            rootNote={
+              relationshipFretboardState?.rootNote ??
+              rootNote
+            }
+            activeNoteIndexes={
+              fretboardActiveNoteIndexes
+            }
             customNotes={customNotes}
-            showOutsideNotes={showOutsideNotes}
+            showOutsideNotes={
+              fretboardShowOutsideNotes
+            }
             practiceRangeEnabled={practiceRangeEnabled}
             practiceRangeFrom={practiceRangeFrom}
             practiceRangeTo={practiceRangeTo}
@@ -1498,6 +1932,28 @@ function changeTuningPreset(presetId: string) {
             ])}
             analyzerEnabled={chordAnalyzerEnabled}
             analyzerPositions={analyzerPositions}
+            relationshipEnabled={
+              Boolean(relationshipFretboardState)
+            }
+            relationshipDisplayNames={
+              relationshipFretboardState?.displayNames ??
+              {}
+            }
+            relationshipPreservedNoteIndexes={
+              relationshipFretboardState
+                ?.preservedNoteIndexes ??
+              []
+            }
+            relationshipNewNoteIndexes={
+              relationshipFretboardState
+                ?.newNoteIndexes ??
+              []
+            }
+            relationshipResolutionTargetNoteIndexes={
+              relationshipFretboardState
+                ?.resolutionTargetNoteIndexes ??
+              []
+            }
             selectedPosition={selectedPosition}
             onNoteClick={handleFretboardNoteClick}
               onNoteDoubleClick={handleFretboardNoteDoubleClick}

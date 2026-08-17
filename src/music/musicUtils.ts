@@ -1,8 +1,19 @@
 import { CHROMATIC_NOTES, INTERVAL_LABELS } from "./musicData";
 
 export function getNoteIndex(note: string): number {
+  const enharmonicMap: Record<string, string> = {
+    "C#": "Db",
+    "D#": "Eb",
+    "F#": "Gb",
+    "G#": "Ab",
+    "A#": "Bb",
+  };
+
+  const normalized =
+    enharmonicMap[note] ?? note;
+
   return CHROMATIC_NOTES.indexOf(
-    note as (typeof CHROMATIC_NOTES)[number],
+    normalized as (typeof CHROMATIC_NOTES)[number],
   );
 }
 
@@ -253,14 +264,15 @@ function getOpenStringPitchOffsets(
 export function getLowestSelectedNote(
   positions: readonly FretboardPosition[],
   tuning: readonly string[],
-  suppliedOpenStringOffsets?: readonly number[],
+  openStringPitchOffsets?: readonly number[],
 ): string | null {
   if (positions.length === 0) {
     return null;
   }
 
   const openStringOffsets =
-    suppliedOpenStringOffsets ?? getOpenStringPitchOffsets(tuning);
+    openStringPitchOffsets ??
+    getOpenStringPitchOffsets(tuning);
 
   let lowestPosition = positions[0];
   let lowestPitch =
@@ -325,14 +337,15 @@ export function getChordInversionLabel(
 export function getSelectedVoicingNotes(
   positions: readonly FretboardPosition[],
   tuning: readonly string[],
-  suppliedOpenStringOffsets?: readonly number[],
+  openStringPitchOffsets?: readonly number[],
 ): string[] {
   if (positions.length === 0) {
     return [];
   }
 
   const openStringOffsets =
-    suppliedOpenStringOffsets ?? getOpenStringPitchOffsets(tuning);
+    openStringPitchOffsets ??
+    getOpenStringPitchOffsets(tuning);
 
   return [...positions]
     .map((position) => ({
