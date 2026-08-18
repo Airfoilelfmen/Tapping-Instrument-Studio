@@ -717,7 +717,12 @@ function changeTuningPreset(presetId: string) {
       return;
     }
 
-    setRootNote(note);
+    const displayedRoot = displayNote(
+      note,
+      notationPreference,
+    );
+
+    setRootNote(displayedRoot);
   }
 
 
@@ -896,7 +901,9 @@ function changeTuningPreset(presetId: string) {
    * Find Same Note no longer forces all notes to appear by itself.
    */
   const fretboardShowOutsideNotes =
-    showOutsideNotes || octaveHighlightEnabled;
+    Boolean(relationshipFretboardState) ||
+    octaveHighlightEnabled ||
+    (explorerEnabled && showOutsideNotes);
 
   const fretboardActiveNoteIndexes =
     relationshipFretboardState
@@ -965,7 +972,11 @@ function changeTuningPreset(presetId: string) {
               <button
                 type="button"
                 className={!explorerEnabled ? "activeMode" : ""}
-                onClick={() => setExplorerEnabled(false)}
+                onClick={() => {
+                  setExplorerEnabled(false);
+                  setSelectedPosition(null);
+                  setSelectedNoteInfo(null);
+                }}
               >
                 Off
               </button>
@@ -1822,6 +1833,7 @@ function changeTuningPreset(presetId: string) {
             selectedChord={selectedChord}
             customNotes={customNotes}
             notationPreference={notationPreference}
+            fretboardVisualizationEnabled={explorerEnabled}
             onFretboardStateChange={
               setRelationshipFretboardState
             }

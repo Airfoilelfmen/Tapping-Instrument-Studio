@@ -1610,7 +1610,6 @@ export function generateHarmonicCandidates(
   options: CandidateGenerationOptions = {},
 ): HarmonicCandidate[] {
   const {
-    limit = 24,
     includeSupplementalChords = true,
     includeSamePitchSet = false,
   } = options;
@@ -1666,12 +1665,14 @@ export function generateHarmonicCandidates(
     });
   });
 
-  return rankHarmonicCandidates(
-    candidates,
-  ).slice(
-    0,
-    Math.max(0, limit),
-  );
+  /*
+   * Return the complete valid candidate pool.
+   *
+   * Each relationship view must rank the same unfiltered candidates.
+   * Otherwise the generic close-harmony ranking removes more adventurous
+   * choices before Explore has a chance to evaluate them.
+   */
+  return candidates;
 }
 
 export function findCandidateByName(
@@ -1982,6 +1983,11 @@ export function generateHarmonicPathBranch(
       options,
     );
 
+  const viewLimit = Math.max(
+    0,
+    options.limit ?? 24,
+  );
+
   return {
     path,
     fromEvent,
@@ -1993,19 +1999,19 @@ export function generateHarmonicPathBranch(
         rankCandidatesForRelationshipView(
           candidates,
           "stay-close",
-        ),
+        ).slice(0, viewLimit),
 
       transform:
         rankCandidatesForRelationshipView(
           candidates,
           "transform",
-        ),
+        ).slice(0, viewLimit),
 
       explore:
         rankCandidatesForRelationshipView(
           candidates,
           "explore",
-        ),
+        ).slice(0, viewLimit),
     },
   };
 }

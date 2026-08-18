@@ -54,6 +54,7 @@ type RelationshipsPanelProps = {
   selectedChord: ChordName;
   customNotes: string[];
   notationPreference: AccidentalPreference;
+  fretboardVisualizationEnabled: boolean;
   onFretboardStateChange: (
     state: RelationshipFretboardState | null,
   ) => void;
@@ -63,6 +64,11 @@ type SimpleDirection =
   | "stay-close"
   | "transform"
   | "explore";
+
+const ADVANCED_NOTE_OPTIONS = [
+  "C", "C#", "Db", "D", "D#", "Eb", "E", "F",
+  "F#", "Gb", "G", "G#", "Ab", "A", "A#", "Bb", "B",
+] as const;
 
 function createSourceEvent(
   displayMode: DisplayMode,
@@ -128,11 +134,15 @@ function viewLabel(view: SimpleDirection): string {
 }
 
 function viewDescription(view: SimpleDirection): string {
-  if (view === "stay-close") return "Keep most of the sound.";
-  if (view === "transform") {
-    return "Keep some notes, change their harmonic meaning.";
+  if (view === "stay-close") {
+    return "Keep most notes in common.";
   }
-  return "Look for less obvious harmonic directions.";
+
+  if (view === "transform") {
+    return "Keep some notes, change the harmonic color.";
+  }
+
+  return "Move toward less obvious harmonic options.";
 }
 
 function eventName(
@@ -152,6 +162,7 @@ function RelationshipsPanel({
   selectedChord,
   customNotes,
   notationPreference,
+  fretboardVisualizationEnabled,
   onFretboardStateChange,
 }: RelationshipsPanelProps) {
   const initialEvent = useMemo(
@@ -321,7 +332,7 @@ function RelationshipsPanel({
      * Without a preview, Fretboard Highlight (or Off) owns the
      * fretboard visualization.
      */
-    if (!previewCandidate) {
+    if (!previewCandidate || !fretboardVisualizationEnabled) {
       onFretboardStateChange(null);
       return;
     }
@@ -389,6 +400,7 @@ function RelationshipsPanel({
     currentEvent,
     previewCandidate,
     constraints,
+    fretboardVisualizationEnabled,
     onFretboardStateChange,
   ]);
 
@@ -480,7 +492,7 @@ function RelationshipsPanel({
       <div className="relationshipsSimpleHeader">
         <div>
           <span className="simplePanelEyebrow">
-            Relationships
+            Harmony Relationships
           </span>
           <h2>
             Where could{" "}
@@ -488,19 +500,6 @@ function RelationshipsPanel({
           </h2>
         </div>
 
-        {path.events.length > 1 && (
-          <div className="relationshipsSimplePath">
-            {path.events.map(
-              (event, index) => (
-                <span
-                  key={`${event.id}-${index}`}
-                >
-                  {eventName(event, notationPreference)}
-                </span>
-              ),
-            )}
-          </div>
-        )}
       </div>
 
       <div className="relationshipsSimpleDirections">
@@ -552,7 +551,7 @@ function RelationshipsPanel({
               )
             }
           >
-            Advanced{" "}
+            Guide the Harmony{" "}
             {advancedOpen ? "▴" : "▾"}
           </button>
         </div>
@@ -585,108 +584,128 @@ function RelationshipsPanel({
 
         {advancedOpen && (
           <div className="relationshipsAdvanced">
-            <div className="relationshipsAdvancedField">
-              <span>Resolve</span>
+            <div className="relationshipsAdvancedSection">
+              <div className="relationshipsAdvancedCopy">
+                <strong>Resolve a note</strong>
+                <span>
+                  Choose a note from the current harmony and where you want it to move.
+                </span>
+              </div>
 
-              <select
-                value={resolveSource}
-                onChange={(event) => {
-                  const source =
-                    event.target.value;
+              <div className="relationshipsAdvancedField relationshipsResolveField">
+                <select
+                  value={resolveSource}
+                  aria-label="Resolve source note"
+                  onChange={(event) => {
+                    const source =
+                      event.target.value;
 
-                  setResolveSource(source);
+                    setResolveSource(source);
 
-                  if (
-                    source &&
-                    !resolveTarget
-                  ) {
-                    const sourceClass =
-                      toPitchClass(source);
+                    if (
+                      source &&
+                      !resolveTarget
+                    ) {
+                      const sourceClass =
+                        toPitchClass(source);
 
-                    setResolveTarget(
-                      CHROMATIC_NOTES[
-                        (sourceClass + 1) %
-                        CHROMATIC_NOTES.length
-                      ],
-                    );
-                  }
-                }}
-              >
-                <option value="">
-                  No resolution
-                </option>
-                {currentTones.map(
-                  (tone) => (
-                    <option
-                      key={`resolve-source-${tone.pitchClass}`}
-                      value={tone.pitch}
-                    >
-                      {displayNote(
-                        tone.pitch,
-                        notationPreference,
-                      )}
-                    </option>
-                  ),
-                )}
-              </select>
-
-              {resolveSource && (
-                <>
-                  <span>→</span>
-                  <select
-                    value={resolveTarget}
-                    onChange={(event) =>
                       setResolveTarget(
-                        event.target.value,
-                      )
+                        displayNote(
+                          CHROMATIC_NOTES[
+                            (sourceClass + 1) %
+                            CHROMATIC_NOTES.length
+                          ],
+                          notationPreference,
+                        ),
+                      );
                     }
-                  >
-                    {CHROMATIC_NOTES.map(
-                      (note) => (
-                        <option
-                          key={`resolve-target-${note}`}
-                          value={note}
-                        >
-                          {displayNote(
-                            note,
-                            notationPreference,
-                          )}
-                        </option>
-                      ),
-                    )}
-                  </select>
-                </>
-              )}
+                  }}
+                >
+                  <option value="">
+                    No resolution
+                  </option>
+                  {currentTones.map(
+                    (tone) => (
+                      <option
+                        key={`resolve-source-${tone.pitchClass}`}
+                        value={tone.pitch}
+                      >
+                        {displayNote(
+                          tone.pitch,
+                          notationPreference,
+                        )}
+                      </option>
+                    ),
+                  )}
+                </select>
+
+                {resolveSource && (
+                  <>
+                    <span
+                      className="relationshipsResolveArrow"
+                      aria-hidden="true"
+                    >
+                      →
+                    </span>
+                    <select
+                      value={resolveTarget}
+                      aria-label="Resolve target note"
+                      onChange={(event) =>
+                        setResolveTarget(
+                          event.target.value,
+                        )
+                      }
+                    >
+                      {ADVANCED_NOTE_OPTIONS.map(
+                        (note) => (
+                          <option
+                            key={`resolve-target-${note}`}
+                            value={note}
+                          >
+                            {note}
+                          </option>
+                        ),
+                      )}
+                    </select>
+                  </>
+                )}
+              </div>
             </div>
 
-            <label className="relationshipsAdvancedField">
-              <span>Require note</span>
-              <select
-                value={requiredPitch}
-                onChange={(event) =>
-                  setRequiredPitch(
-                    event.target.value,
-                  )
-                }
-              >
-                <option value="">
-                  None
-                </option>
-                {CHROMATIC_NOTES.map(
-                  (note) => (
-                    <option
-                      key={`require-${note}`}
-                      value={note}
-                    >
-                      {displayNote(
-                        note,
-                        notationPreference,
-                      )}
-                    </option>
-                  ),
-                )}
-              </select>
-            </label>
+            <div className="relationshipsAdvancedSection">
+              <div className="relationshipsAdvancedCopy">
+                <strong>Require a note</strong>
+                <span>
+                  Only show harmonic options that include this note.
+                </span>
+              </div>
+
+              <label className="relationshipsAdvancedField">
+                <select
+                  value={requiredPitch}
+                  aria-label="Required note"
+                  onChange={(event) =>
+                    setRequiredPitch(
+                      event.target.value,
+                    )
+                  }
+                >
+                  <option value="">
+                    None
+                  </option>
+                  {ADVANCED_NOTE_OPTIONS.map(
+                    (note) => (
+                      <option
+                        key={`require-${note}`}
+                        value={note}
+                      >
+                        {note}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </label>
+            </div>
           </div>
         )}
       </div>
@@ -763,6 +782,39 @@ function RelationshipsPanel({
               "Choose one of the suggestions above."}
           </strong>
         </div>
+
+        {path.events.length > 1 && (
+          <div className="relationshipsFooterPath">
+            <span className="relationshipsFooterPathLabel">
+              Path
+            </span>
+            <div className="relationshipsFooterPathEvents">
+              {path.events.map(
+                (event, index) => (
+                  <span
+                    key={`${event.id}-${index}`}
+                    className="relationshipsFooterPathEvent"
+                  >
+                    {index > 0 && (
+                      <span
+                        className="relationshipsFooterPathArrow"
+                        aria-hidden="true"
+                      >
+                        →
+                      </span>
+                    )}
+                    <strong>
+                      {eventName(
+                        event,
+                        notationPreference,
+                      )}
+                    </strong>
+                  </span>
+                ),
+              )}
+            </div>
+          </div>
+        )}
 
         <div className="relationshipsSimpleActions">
           {(previewCandidate ||

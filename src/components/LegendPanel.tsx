@@ -60,7 +60,7 @@ function LegendPanel({
         {analyzerEnabled
           ? "Analyzer colors"
           : explorerEnabled
-            ? "Explorer colors"
+            ? "Fretboard colors"
             : "Colors"}
       </p>
 
@@ -79,7 +79,7 @@ function LegendPanel({
         explorerMode === "notes" || explorerMode === "intervals" ? (
           <div>
             <span className="legendCircle explorerLegend" />
-            Explorer match
+            Highlighted note
           </div>
         ) : explorerMode === "chords" ? (
           <DegreeLegend />
