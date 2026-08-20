@@ -1063,14 +1063,22 @@ function changeTuningPreset(presetId: string) {
                   value={explorerTargetNote}
                   onChange={(event) => {
                     const note = event.target.value;
+
+                    setNotationPreference(
+                      preferenceFromSpelling(
+                        note,
+                        notationPreference,
+                      ),
+                    );
+
                     setExplorerTargetNote(note);
                     setDisplayMode("custom");
                     setCustomNotes([note]);
                   }}
                 >
-                  {CHROMATIC_NOTES.map((note) => (
+                  {ROOT_NOTE_OPTIONS.map((note) => (
                     <option key={`highlight-${note}`} value={note}>
-                      {displayNote(note)}
+                      {note}
                     </option>
                   ))}
                 </select>
